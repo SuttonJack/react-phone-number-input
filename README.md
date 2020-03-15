@@ -58,7 +58,7 @@ function Example() {
 
 The `value` argument of `onChange(value)` function will be the parsed phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format. For example, if a user chooses "United States" and enters `(213) 373-4253` in the input field then `onChange(value)` will be called with `value` being `"+12133734253"`.
 
-See the [list of all available `props`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/styleguide/index.html#phoneinputwithcountry) for `<PhoneInput/>`. All properties not listed there will be passed through to the phone number `<input/>` component.
+See the [list of all available `props`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/index.html#phoneinputwithcountry) for `<PhoneInput/>`. All properties not listed there will be passed through to the phone number `<input/>` component.
 
 To set default country pass a `defaultCountry` property. Example: `<PhoneInput defaultCountry="US" .../>`.
 
@@ -181,7 +181,7 @@ getCountryCallingCode('US') === '1'
 
 ## Flags URL
 
-By default, all flags are linked from [`country-flag-icons`](https://gitlab.com/catamphetamine/country-flag-icons)'s [GitHub pages](http://catamphetamine.gitlab.io/country-flag-icons/3x2) website as `<img src="..."/>`s. Any other flag icons could be used instead by passing a custom [`flagUrl`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/styleguide/index.html#phoneinputwithcountry) property (which is `"https://catamphetamine.gitlab.io/country-flag-icons/3x2/{XX}.svg"` by default) and specifying their aspect ratio via [`--PhoneInputCountryFlag-aspectRatio`](https://gitlab.com/catamphetamine/react-phone-number-input/blob/master/style.css) CSS variable (which is `1.5` by default, meaning "3x2" aspect ratio).
+By default, all flags are linked from [`country-flag-icons`](https://gitlab.com/catamphetamine/country-flag-icons)'s [GitHub pages](http://catamphetamine.gitlab.io/country-flag-icons/3x2) website as `<img src="..."/>`s. Any other flag icons could be used instead by passing a custom [`flagUrl`](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry) property (which is `"https://catamphetamine.gitlab.io/country-flag-icons/3x2/{XX}.svg"` by default) and specifying their aspect ratio via [`--PhoneInputCountryFlag-aspectRatio`](https://gitlab.com/catamphetamine/react-phone-number-input/blob/master/style.css) CSS variable (which is `1.5` by default, meaning "3x2" aspect ratio).
 
 For example, using [`flagpack`](https://github.com/jackiboy/flagpack) "4x3" flag icons would be as simple as:
 
@@ -201,7 +201,7 @@ A sidenote: `flagpack` [doesn't have](https://github.com/jackiboy/flagpack/issue
 
 Linking flag icons as external `<img/>`s is only done to reduce the overall bundle size, because including all country flags in the code as inline `<svg/>`s would increase the bundle size by 44 kB (after gzip).
 
-If bundle size is not an issue (for example, for a standalone non-web application, or an "intranet" application), then all country flags can be included directly in the code by passing the [`flags`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/styleguide/index.html#phoneinputwithcountry) property:
+If bundle size is not an issue (for example, for a standalone non-web application, or an "intranet" application), then all country flags can be included directly in the code by passing the [`flags`](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry) property:
 
 ```js
 import PhoneInput from 'react-phone-number-input'
@@ -377,7 +377,7 @@ Make sure to put a `<PhoneInput/>` into a `<form/>` otherwise web-browser's ["au
 
 ## Customizing
 
-The `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs/styleguide/index.html#phoneinputwithcountry):
+The `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry):
 
 * `inputComponent` — Custom phone number `<input/>` component.
 
