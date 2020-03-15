@@ -6,7 +6,7 @@ pages:
   - npm run generate-docs
   - npm run build
   - mv ./bundle ./public
-  - cp ./website/* ./public/
+  - cp --recursive ./website/* ./public/
 
   artifacts:
     paths:

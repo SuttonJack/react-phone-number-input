@@ -647,7 +647,7 @@ PhoneNumberInput.propTypes = {
 	 * A URL template of a country flag, where
 	 * "{XX}" is a two-letter country code in upper case,
 	 * or where "{xx}" is a two-letter country code in lower case.
-	 * By default it points to `country-flag-icons` github pages website.
+	 * By default it points to `country-flag-icons` gitlab pages website.
 	 * I imagine someone might want to download those country flag icons
 	 * and host them on their own servers instead
 	 * (all flags are available in the `country-flag-icons` library).
@@ -832,10 +832,10 @@ PhoneNumberInput.defaultProps = {
 	flagComponent: Flag,
 
 	/**
-	 * By default, uses icons from `country-flag-icons` github pages website.
+	 * By default, uses icons from `country-flag-icons` gitlab pages website.
 	 */
 	// Must be equal to `flagUrl` in `./CountryIcon.js`.
-	flagUrl: 'https://catamphetamine.github.io/country-flag-icons/3x2/{XX}.svg',
+	flagUrl: 'https://catamphetamine.gitlab.io/country-flag-icons/3x2/{XX}.svg',
 
 	/**
 	 * Default "International" country `<select/>` option icon.
