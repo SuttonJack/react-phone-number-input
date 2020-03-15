@@ -69,7 +69,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/catamphetamine/react-phone-number-input.git"
+    "url": "git+https://gitlab.com/catamphetamine/react-phone-number-input.git"
   },
   "keywords": [
     "react",
@@ -82,7 +82,7 @@
   "author": "catamphetamine <purecatamphetamine@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/catamphetamine/react-phone-number-input/issues"
+    "url": "https://gitlab.com/catamphetamine/react-phone-number-input/issues"
   },
-  "homepage": "https://github.com/catamphetamine/react-phone-number-input#readme"
+  "homepage": "https://gitlab.com/catamphetamine/react-phone-number-input#readme"
 }
