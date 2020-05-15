@@ -39,7 +39,7 @@ If you're not using a bundler then use a [standalone version from a CDN](https:/
 
 ## Use
 
-The component requires two properties: `value` and `onChange(value)`.
+The component requires two properties: `value` and `onChange(value)`. [See the list of all available `props`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/index.html#phoneinputwithcountry).
 
 ```js
 import 'react-phone-number-input/style.css'
@@ -58,7 +58,7 @@ function Example() {
 
 The `value` argument of `onChange(value)` function will be the parsed phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format. For example, if a user chooses "United States" and enters `(213) 373-4253` in the input field then `onChange(value)` will be called with `value` being `"+12133734253"`.
 
-See the [list of all available `props`](http://catamphetamine.gitlab.io/react-phone-number-input/docs/index.html#phoneinputwithcountry) for `<PhoneInput/>`. All properties not listed there will be passed through to the phone number `<input/>` component.
+All unknown properties will be passed through to the phone number `<input/>` component.
 
 To set default country pass a `defaultCountry` property. Example: `<PhoneInput defaultCountry="US" .../>`.
 
