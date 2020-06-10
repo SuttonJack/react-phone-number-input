@@ -383,7 +383,7 @@ The `<PhoneInput/>` component accepts some [customization properties](http://cat
 
 * `countrySelectComponent` — Custom country `<select/>` component.
 
-* `containerComponent` — Custom wrapping `<div/>` component.
+<!-- * `containerComponent` — Custom wrapping `<div/>` component. -->
 
 * `metadata` — Custom `libphonenumber-js` ["metadata"](#min-vs-max-vs-mobile).
 
@@ -459,6 +459,7 @@ Receives properties:
 Must also either use `React.forwardRef()` to "forward" `ref` to the `<input/>` or implement `.focus()` method.
 -->
 
+<!--
 #### `containerComponent`
 
 React component that contains the country picker and input. Is `"div"` by default meaning that it renders a standard DOM `<div/>`.
@@ -467,6 +468,7 @@ Receives properties:
 
 * `style: object` — A component CSS style object.
 * `className: string` — Classes to attach to the component, typically changes when component focuses or blurs.
+-->
 
 ## CDN
 
