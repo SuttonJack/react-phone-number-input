@@ -434,6 +434,9 @@ class PhoneNumberInput_ extends React.PureComponent {
 			countrySelectComponent: CountrySelectComponent,
 			countrySelectProps,
 
+			// Container `<div/>` properties.
+			containerComponent: ContainerComponent,
+
 			// Get "rest" properties (passed through to number `<input/>`).
 			defaultCountry,
 			countries,
@@ -479,7 +482,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 		])
 
 		return (
-			<div
+			<ContainerComponent
 				style={style}
 				className={classNames(className, 'PhoneInput', {
 					'PhoneInput--focus': isFocused
@@ -519,7 +522,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 						numberInputProps && numberInputProps.className,
 						rest.className
 					)}/>
-			</div>
+			</ContainerComponent>
 		)
 	}
 }
@@ -772,6 +775,16 @@ PhoneNumberInput.propTypes = {
 	inputComponent: PropTypes.elementType.isRequired,
 
 	/**
+	 * Wrapping `<div/>` component.
+	 *
+	 * Receives properties:
+	 *
+	 * * `style: object` — A component CSS style object.
+	 * * `className: string` — Classes to attach to the component, typically changes when component focuses or blurs.
+	 */
+	containerComponent: PropTypes.elementType.isRequired,
+
+	/**
 	 * Phone number `<input/>` component props.
 	 */
 	numberInputProps: PropTypes.object,
@@ -846,6 +859,11 @@ PhoneNumberInput.defaultProps = {
 	 * Phone number `<input/>` component.
 	 */
 	inputComponent: 'input',
+
+	/**
+	 * Wrapping `<div/>` component.
+	 */
+	containerComponent: 'div',
 
 	/**
 	 * Some users requested a way to reset the component:
