@@ -10,7 +10,7 @@ import {
 	getInitialParsedInput,
 	// Private functions
 	get_country_from_possibly_incomplete_international_phone_number,
-	compare_strings,
+	compareStrings,
 	strip_country_calling_code,
 	getNationalSignificantNumberDigits,
 	could_number_belong_to_country,
@@ -266,9 +266,9 @@ describe('phoneInputHelpers', () =>
 
 	it('should compare strings', () =>
 	{
-		compare_strings('aa', 'ab').should.equal(-1)
-		compare_strings('aa', 'aa').should.equal(0)
-		compare_strings('aac', 'aab').should.equal(1)
+		compareStrings('aa', 'ab').should.equal(-1)
+		compareStrings('aa', 'aa').should.equal(0)
+		compareStrings('aac', 'aab').should.equal(1)
 	})
 
 	it('should strip country calling code from a number', () =>

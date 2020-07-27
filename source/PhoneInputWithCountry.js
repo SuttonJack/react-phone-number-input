@@ -453,6 +453,8 @@ class PhoneNumberInput_ extends React.PureComponent {
 			reset,
 			metadata,
 			international,
+			locales,
+			// compareStrings,
 			...rest
 		} = this.props
 
@@ -469,7 +471,9 @@ class PhoneNumberInput_ extends React.PureComponent {
 				getCountrySelectOptions(
 					countries || getCountries(metadata),
 					labels,
-					addInternationalOption
+					addInternationalOption,
+					locales,
+					// compareStrings
 				),
 				getSupportedCountryOptions(countryOptionsOrder, metadata)
 			)
@@ -645,6 +649,34 @@ PhoneNumberInput.propTypes = {
 	 * See the `locales` directory for examples.
 	 */
 	labels: labelsPropType.isRequired,
+
+	/**
+	 * Country `<select/>` options are sorted by their labels.
+	 * The default sorting function uses `a.localeCompare(b, locales)`,
+	 * and, if that's not available, falls back to simple `a > b` / `a < b`.
+	 * Some languages, like Chinese, support multiple sorting variants
+	 * (called "collations"), and the user might prefer one or another.
+	 * Also, sometimes the Operating System language is not always
+	 * the preferred language for a person using a website or an application,
+	 * so there should be a way to specify custom locale.
+	 * This `locales` property mimicks the `locales` argument of `Intl` constructors,
+	 * and can be either a Unicode BCP 47 locale identifier or an array of such locale identifiers.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument
+	 */
+	locales: PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.arrayOf(PropTypes.string)
+	]),
+
+	/*
+	 * Custom country `<select/>` options sorting function.
+	 * The default one uses `a.localeCompare(b)`, and,
+	 * if that's not available, falls back to simple `a > b`/`a < b`.
+	 * There have been requests to add custom sorter for cases
+	 * like Chinese language and "pinyin" (non-default) sorting order.
+	 * https://stackoverflow.com/questions/22907288/chinese-sorting-by-pinyin-in-javascript-with-localecompare
+	compareStrings: PropTypes.func,
+	 */
 
 	/**
 	 * A URL template of a country flag, where

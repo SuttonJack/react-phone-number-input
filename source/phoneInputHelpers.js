@@ -50,7 +50,12 @@ export function getPreSelectedCountry(phoneNumber, country, countries, includeIn
  * @param  {boolean} includeInternationalOption - Whether should include "International" option at the top of the list.
  * @return {object[]} A list of objects having shape `{ value : string, label : string }`.
  */
-export function getCountrySelectOptions(countries, country_names, includeInternationalOption)
+export function getCountrySelectOptions(
+	countries,
+	country_names,
+	includeInternationalOption,
+	locales,
+	compare_strings = compareStrings)
 {
 	// Generates a `<Select/>` option for each country.
 	const country_select_options = countries.map((country) =>
@@ -66,7 +71,7 @@ export function getCountrySelectOptions(countries, country_names, includeInterna
 	}))
 
 	// Sort the list of countries alphabetically.
-	country_select_options.sort((a, b) => compare_strings(a.label, b.label))
+	country_select_options.sort((a, b) => compare_strings(a.label, b.label, locales))
 
 	// Add the "International" option to the country list (if suitable)
 	if (includeInternationalOption)
@@ -470,15 +475,18 @@ export function get_country_from_possibly_incomplete_international_phone_number(
 /**
  * Compares two strings.
  * A helper for `Array.sort()`.
+ * @param {string} a — First string.
+ * @param {string} b — Second string.
+ * @param {(string[]|string)} [locales] — The `locales` argument of `String.localeCompare`.
  */
-export function compare_strings(a, b) {
+export function compareStrings(a, b, locales) {
   // Use `String.localeCompare` if it's available.
   // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
   // Which means everyone except IE <= 10 and Safari <= 10.
   // `localeCompare()` is available in latest Node.js versions.
   /* istanbul ignore else */
   if (String.prototype.localeCompare) {
-    return a.localeCompare(b);
+    return a.localeCompare(b, locales);
   }
   /* istanbul ignore next */
   return a < b ? -1 : (a > b ? 1 : 0);
