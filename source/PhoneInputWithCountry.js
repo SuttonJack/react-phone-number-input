@@ -361,9 +361,14 @@ class PhoneNumberInput_ extends React.PureComponent {
 				)
 			)
 		) {
+			if (newDefaultCountry) {
+				if (!isCountrySupportedWithError(newDefaultCountry, metadata)) {
+					newDefaultCountry = prevDefaultCountry
+				}
+			}
 			return {
 				...newState,
-				country: isCountrySupportedWithError(newDefaultCountry, metadata) ? newDefaultCountry : prevDefaultCountry,
+				country: newDefaultCountry,
 				// If `parsedInput` is empty, then automatically select the new `country`
 				// and set `parsedInput` to `+{getCountryCallingCode(newCountry)}`.
 				parsedInput: generateInitialParsedInput(newValue, undefined, props)
