@@ -15,7 +15,8 @@
     "classnames": "^2.2.5",
     "country-flag-icons": "^1.0.2",
     "input-format": "^0.3.0",
-    "libphonenumber-js": "^1.7.58",
+    "libphonenumber": "0.0.10",
+    "libphonenumber-js": "^1.8.0",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
