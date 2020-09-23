@@ -1,5 +1,16 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.0.28 / 23.09.2020
+===================
+
+* Added an _experimental_ React Native exported component (see the README).
+
+3.0.27 / 22.09.2020
+===================
+
+* Fixed a bug when resetting `defaultCountry` property of a "with country select" component produced an error.
+
+
 3.0.14 / 22.01.2020
 ===================
 

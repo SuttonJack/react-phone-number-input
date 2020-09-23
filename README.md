@@ -112,6 +112,26 @@ Get `style.css` file from this package, optionally process it with a [CSS autopr
 
 Or include the `style.css` file directly from a [CDN](#cdn).
 
+## React Native
+
+This library is shipped with an _experimental_ React Native component. [Feedback thread](https://github.com/catamphetamine/react-phone-number-input/issues/296).
+
+```js
+import React, { useState } from 'react'
+import PhoneInput from 'react-phone-number-input/react-native-input'
+
+function Example() {
+  const [value, setValue] = useState()
+  return (
+    <PhoneInput
+      style={...}
+      defaultCountry="US"
+      value={value}
+      onChange={setValue} />
+  )
+}
+```
+
 ## Utility
 
 This package exports several utility functions.
