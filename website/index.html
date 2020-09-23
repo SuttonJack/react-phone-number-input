@@ -135,7 +135,7 @@
 			margin-top: 1em;
 			margin-bottom: 1em;
 			font-size: 125%;
-			font-weight: normal;
+			/*font-weight: normal;*/
 		}
 
 		section > p
@@ -213,6 +213,22 @@
 			border-bottom: none;
 		}
 		*/
+
+		.heading-divider {
+			margin-left: 0.2em;
+			margin-right: 0.2em;
+			color: #c0c0c0;
+		}
+
+		hr.divider {
+			margin-top: 2em;
+			margin-bottom: 1.5em;
+			margin-left: -1.3em;
+			margin-right: -1.3em;
+			color: #c0c0c0;
+			border: none;
+			border-bottom: 1px solid currentColor;
+		}
 
 		@media (max-width: 720px)
 		{
@@ -591,6 +607,8 @@
 
 								"Without country select" phone number input component can be imported from <code>react-phone-number-input/input</code> subpackage.
 
+								<hr className="divider"/>
+
 								<h2>
 									<code className="default">country="US"</code>
 								</h2>
@@ -621,12 +639,14 @@
 `}
 								</Highlight>
 
+								<hr className="divider"/>
+
 								<h2>
-									<code className="default">country="US"</code> and <code className="default">international</code>
+									<code className="default">country="US"</code> <span className="heading-divider">/</span> <code className="default">international</code>
 								</h2>
 
 								<p>
-									If both <code>country</code> and <code>international</code> are specified then the phone number can be input only in international format for that <code>country</code>, but without "country calling code" part.
+									If both <code>country</code> and <code>international</code> are specified then the phone number can be input only in international format for that <code>country</code>. By default, the "country calling code" part (<code>+1</code>) is not included in the <code>&lt;input/&gt;</code>.
 								</p>
 
 								<form>
@@ -635,12 +655,12 @@
 										country="US"
 										international
 										placeholder="Enter phone number"
-										value={this.state.valueCountryInternational}
-										onChange={value => this.setState({ valueCountryInternational: value })}/>
+										value={this.state.valueCountryInternationalWithoutCountryCallingCode}
+										onChange={value => this.setState({ valueCountryInternationalWithoutCountryCallingCode: value })}/>
 								</form>
 
 								<p>
-									<code>value</code>: {this.state.valueCountryInternational && <code>{this.state.valueCountryInternational}</code>}
+									<code>value</code>: {this.state.valueCountryInternationalWithoutCountryCallingCode && <code>{this.state.valueCountryInternationalWithoutCountryCallingCode}</code>}
 								</p>
 
 								<Highlight lang="jsx">
@@ -653,6 +673,44 @@
      onChange={setValue}/>
 `}
 								</Highlight>
+
+								<hr className="divider"/>
+
+								<h2>
+									<code className="default">country="US"</code> <span className="heading-divider">/</span> <code className="default">international</code> <span className="heading-divider">/</span> <code className="default">withCountryCallingCode</code>
+								</h2>
+
+								<p>
+									To include the "country calling code" part (<code>+1</code>) in the <code>&lt;input/&gt;</code>, pass <code>withCountryCallingCode</code> property.
+								</p>
+
+								<form>
+									<Input
+										country="US"
+										international
+										withCountryCallingCode
+										placeholder="Enter phone number"
+										value={this.state.valueCountryInternational}
+										onChange={value => this.setState({ valueCountryInternational: value })}/>
+								</form>
+
+								<p>
+									<code>value</code>: {this.state.valueCountryInternational && <code>{this.state.valueCountryInternational}</code>}
+								</p>
+
+								<Highlight lang="jsx">
+{`import Input from 'react-phone-number-input/input'
+
+<Input
+  country="US"
+  international
+  withCountryCallingCode
+  value={value}
+  onChange={setValue}/>
+`}
+								</Highlight>
+
+								<hr className="divider"/>
 
 								<h2>
 									<code className="default">defaultCountry="US"</code>
@@ -684,6 +742,8 @@
 `}
 								</Highlight>
 
+								<hr className="divider"/>
+
 								<h2>
 									No <code className="default">country</code>
 								</h2>
@@ -711,6 +771,8 @@
   onChange={setValue}/>
 `}
 								</Highlight>
+
+								<hr className="divider"/>
 
 								<h2>
 									Properties
@@ -891,7 +953,7 @@ import PhoneInput from 'react-phone-number-input/react-responsive-ui'
 
 							<section>
 								<h1>
-									Use "international" format for displaying initial <code>value</code> (default)
+									display&#8203;Initial&#8203;Value&#8203;As&#8203;Local&#8203;Number = false (default)
 								</h1>
 
 								<form>
@@ -911,7 +973,7 @@ import PhoneInput from 'react-phone-number-input/react-responsive-ui'
 
 							<section>
 								<h1>
-									Use "national" format for displaying initial <code>value</code>
+									display&#8203;Initial&#8203;Value&#8203;As&#8203;Local&#8203;Number = true
 								</h1>
 
 								<form>
