@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useRef, useState, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { AsYouType, getCountryCallingCode, parseDigits } from 'libphonenumber-js/core'
 
@@ -15,15 +15,23 @@ export function createInput(defaultMetadata) {
 		metadata,
 		smartCaret,
 		international,
+		withCountryCallingCode,
 		...rest
 	}, ref) {
+		const countryMismatchDetected = useRef()
+		const onCountryMismatch = (value, country, actualCountry) => {
+			console.error(`[react-phone-number-input] Expected phone number ${value} to correspond to country ${country} but ${actualCountry ? 'in reality it corresponds to country ' + actualCountry : 'it doesn\'t'}.`)
+			countryMismatchDetected.current = true
+		}
 		const getInitialParsedInput = () => getParsedInputForValue(
 			value,
 			country,
 			international,
+			withCountryCallingCode,
 			defaultCountry,
 			useNationalFormatForDefaultCountryValue,
-			metadata
+			metadata,
+			onCountryMismatch
 		)
 		// This is only used to detect `country` property change.
 		const [prevCountry, setPrevCountry] = useState(country)
@@ -33,6 +41,9 @@ export function createInput(defaultMetadata) {
 		const [parsedInput, setParsedInput] = useState(getInitialParsedInput())
 		// This is only used to detect `value` property changes.
 		const [valueForParsedInput, setValueForParsedInput] = useState(value)
+		// Rerender hack.
+		const [rerenderTrigger, setRerenderTrigger] = useState()
+		const rerender = useCallback(() => setRerenderTrigger({}), [setRerenderTrigger])
 		// If `value` property has been changed externally
 		// then re-initialize the component.
 		useEffect(() => {
@@ -64,15 +75,37 @@ export function createInput(defaultMetadata) {
 		const onParsedInputChange = useCallback((parsedInput) => {
 			let value
 			if (country) {
-				// Won't allow `+` in the beginning
-				// when a `country` has been specified.
-				if (parsedInput && parsedInput[0] === '+') {
-					parsedInput = parsedInput.slice(1)
+				if (international && withCountryCallingCode) {
+					// The `<input/>` value must start with the country calling code.
+					const countryCallingCode = '+' + getCountryCallingCode(country, metadata)
+					if (parsedInput.indexOf(countryCallingCode) !== 0) {
+						// Undo the `<input/>` value change if it doesn't:
+						// Force a re-render of the `<input/>` with previous `parsedInput` value.
+						if (countryMismatchDetected.current) {
+							// In case of a `country`/`value` mismatch,
+							// if it performed an "undo" here, then
+							// it wouldn't let a user edit their phone number at all,
+							// so this special case at least allows phone number editing
+							// when `value` already doesn't match the `country`.
+						} else {
+							return rerender()
+						}
+					}
+				} else {
+					// Entering phone number either in "national" format
+					// when `country` has been specified, or in "international" format
+					// when `country` has been specified but `withCountryCallingCode` hasn't.
+					// Therefore, `+` is not allowed.
+					if (parsedInput && parsedInput[0] === '+') {
+						// Remove the `+`.
+						parsedInput = parsedInput.slice(1)
+					}
 				}
 			} else if (!defaultCountry) {
 				// Force a `+` in the beginning of a `value`
 				// when no `country` and `defaultCountry` have been specified.
 				if (parsedInput && parsedInput[0] !== '+') {
+					// Prepend a `+`.
 					parsedInput = '+' + parsedInput
 				}
 			}
@@ -80,7 +113,7 @@ export function createInput(defaultMetadata) {
 			if (parsedInput) {
 				const asYouType = new AsYouType(country || defaultCountry, metadata)
 				asYouType.input(
-					country && international ?
+					country && international && !withCountryCallingCode ?
 					`+${getCountryCallingCode(country, metadata)}${parsedInput}` :
 					parsedInput
 				)
@@ -95,10 +128,13 @@ export function createInput(defaultMetadata) {
 		}, [
 			country,
 			international,
+			withCountryCallingCode,
 			defaultCountry,
 			metadata,
 			setParsedInput,
-			setValueForParsedInput
+			setValueForParsedInput,
+			rerender,
+			countryMismatchDetected
 		])
 		const InputComponent = smartCaret ? InputSmart : InputBasic
 		return (
@@ -107,6 +143,7 @@ export function createInput(defaultMetadata) {
 				ref={ref}
 				metadata={metadata}
 				international={international}
+				withCountryCallingCode={withCountryCallingCode}
 				country={country || defaultCountry}
 				value={parsedInput}
 				onChange={onParsedInputChange} />
@@ -169,6 +206,14 @@ export function createInput(defaultMetadata) {
 		 * (without "country calling code" `+1`).
 		 */
 		international: PropTypes.bool,
+
+		/**
+		 * If `country` and `international` properties are set,
+		 * then by default it won't include "country calling code" in the input field.
+		 * To change that, pass `withCountryCallingCode` property,
+		 * and it will include "country calling code" in the input field.
+		 */
+		withCountryCallingCode: PropTypes.bool,
 
 		/**
 		 * The `<input/>` component.
@@ -243,6 +288,7 @@ export default createInput()
  * @param  {string} [value]
  * @param  {string} [country]
  * @param  {boolean} [international]
+ * @param  {boolean} [withCountryCallingCode]
  * @param  {string} [defaultCountry]
  * @param  {boolean} [useNationalFormatForDefaultCountryValue]
  * @param  {object} metadata
@@ -252,10 +298,22 @@ function getParsedInputForValue(
 	value,
 	country,
 	international,
+	withCountryCallingCode,
 	defaultCountry,
 	useNationalFormatForDefaultCountryValue,
-	metadata
+	metadata,
+	onCountryMismatch
 ) {
+	if (country && international && withCountryCallingCode) {
+		const prefix = '+' + getCountryCallingCode(country, metadata)
+		if (value) {
+			if (value.indexOf(prefix) !== 0) {
+				onCountryMismatch(value, country)
+			}
+			return value
+		}
+		return prefix
+	}
 	if (!value) {
 		return ''
 	}
@@ -268,7 +326,9 @@ function getParsedInputForValue(
 	if (phoneNumber) {
 		if (country) {
 			if (phoneNumber.country && phoneNumber.country !== country) {
-				console.error(`[react-phone-number-input] Phone number ${value} corresponds to country ${phoneNumber.country} but ${country} was specified instead.`)
+				onCountryMismatch(value, country, phoneNumber.country)
+			} else if (phoneNumber.countryCallingCode !== getCountryCallingCode(country, metadata)) {
+				onCountryMismatch(value, country)
 			}
 			if (international) {
 				return phoneNumber.nationalNumber

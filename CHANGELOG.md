@@ -3,6 +3,8 @@
 3.0.28 / 23.09.2020
 ===================
 
+* Added `withCountryCallingCode` property on the `/input` component: when `country` is set and `international` is `true` and `withCountryCallingCode` is `true` then the "country calling code" part of the phone number will be included in the `<input/>` field.
+
 * Added an _experimental_ React Native exported component (see the README).
 
 3.0.27 / 22.09.2020
