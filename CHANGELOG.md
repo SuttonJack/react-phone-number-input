@@ -1,11 +1,13 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
-3.0.28 / 23.09.2020
-===================
+3.1.0 / 23.09.2020
+==================
 
 * Added `withCountryCallingCode` property on the `/input` component: when `country` is set and `international` is `true` and `withCountryCallingCode` is `true` then the "country calling code" part of the phone number will be included in the `<input/>` field.
 
 * Added an _experimental_ React Native exported component (see the README).
+
+* "With country select" component in "force international mode" now [appends "leading digits"](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/10) for some countries when pre-populating the initial phone number prefix.
 
 3.0.27 / 22.09.2020
 ===================

@@ -140,7 +140,7 @@ export function migrateParsedInputForNewCountry
 		} else {
 			// If `parsedInput` is empty then set `parsedInput` to
 			// `+{getCountryCallingCode(newCountry)}`.
-			return '+' + getCountryCallingCode(new_country, metadata)
+			return getInternationalPhoneNumberPrefix(new_country, metadata)
 		}
 	}
 
@@ -198,10 +198,10 @@ export function migrateParsedInputForNewCountry
 				if (getCountryCallingCode(new_country, metadata) === getCountryCallingCode(previous_country, metadata)) {
 					return value
 				} else {
-					return `+${getCountryCallingCode(new_country, metadata)}`
+					return getInternationalPhoneNumberPrefix(new_country, metadata)
 				}
 			} else {
-				const defaultValue = `+${getCountryCallingCode(new_country, metadata)}`
+				const defaultValue = getInternationalPhoneNumberPrefix(new_country, metadata)
 				// If `parsedInput`'s country calling code part is the same
 				// as for the new `country`, then leave `parsedInput` as is.
 				if (value.indexOf(defaultValue) === 0) {
@@ -584,7 +584,21 @@ export function getInitialParsedInput(value, country, international, metadata) {
 	// If `international` property is `true`,
 	// then always show country calling code in the input field.
 	if (!value && international && country) {
-		return `+${getCountryCallingCode(country, metadata)}`
+		return getInternationalPhoneNumberPrefix(country, metadata)
 	}
 	return value
+}
+
+const ONLY_DIGITS_REGEXP = /^\d+$/
+export function getInternationalPhoneNumberPrefix(country, metadata) {
+	// Standard international phone number prefix: "+" and "country calling code".
+	let prefix = '+' + getCountryCallingCode(country, metadata)
+	// Get "leading digits" for a phone number of the country.
+	// If there're "leading digits" then they can be part of the prefix too.
+	metadata = new Metadata(metadata)
+	metadata.country(country)
+	if (metadata.numberingPlan.leadingDigits() && ONLY_DIGITS_REGEXP.test(metadata.numberingPlan.leadingDigits())) {
+		prefix += metadata.numberingPlan.leadingDigits()
+	}
+	return prefix
 }

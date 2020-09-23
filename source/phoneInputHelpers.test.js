@@ -13,6 +13,7 @@ import {
 	compareStrings,
 	strip_country_calling_code,
 	getNationalSignificantNumberDigits,
+	getInternationalPhoneNumberPrefix,
 	could_number_belong_to_country,
 	trimNumber
 } from './phoneInputHelpers'
@@ -307,6 +308,17 @@ describe('phoneInputHelpers', () =>
 		expect(getNationalSignificantNumberDigits('8', 'RU', metadata)).to.be.undefined
 		expect(getNationalSignificantNumberDigits('', 'RU', metadata)).to.be.undefined
 	})
+
+	it('should prepend leading digits when generating international phone number prefix', () =>
+	{
+		// No fixed leading digits.
+		getInternationalPhoneNumberPrefix('RU', metadata).should.equal('+7')
+
+		// Fixed leading digits.
+		getInternationalPhoneNumberPrefix('AS', metadata).should.equal('+1684')
+	})
+
+	getInternationalPhoneNumberPrefix
 
 	it('should determine of a number could belong to a country', () =>
 	{
