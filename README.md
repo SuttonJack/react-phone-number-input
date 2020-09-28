@@ -252,6 +252,8 @@ function Example() {
 }
 ```
 
+Doesn't require any CSS.
+
 Receives properties:
 
 * `country: string?` — If `country` is specified then the phone number can only be input in "national" (not "international") format, and will be parsed as a phone number belonging to the `country`. Example: `country="US"`.
