@@ -148,7 +148,8 @@ class PhoneNumberInput_ extends React.PureComponent {
 		const {
 			international,
 			metadata,
-			onChange
+			onChange,
+			focusInputOnCountrySelection
 		} = this.props
 
 		const {
@@ -172,7 +173,9 @@ class PhoneNumberInput_ extends React.PureComponent {
 		const newValue = e164(newParsedInput, newCountry, metadata)
 
 		// Focus phone number `<input/>` upon country selection.
-		this.getInputRef().current.focus()
+		if (focusInputOnCountrySelection) {
+			this.getInputRef().current.focus()
+		}
 
 		// If the user has already manually selected a country
 		// then don't override that already selected country
@@ -867,7 +870,18 @@ PhoneNumberInput.propTypes = {
 	// therefore reducing "conversion" (that's a marketing term).
 	// Assuming that the phone number's country is the user's country
 	// is not 100% correct but in most cases I guess it's valid.
-	onCountryChange: PropTypes.func
+	onCountryChange: PropTypes.func,
+
+	/**
+	 * If set to `false`, will not focus the `<input/>` component
+	 * when the user selects a country from the list of countries.
+	 * This can be used to conform to the Web Content Accessibility Guidelines (WCAG).
+	 * Quote:
+	 * "On input: Changing the setting of any user interface component
+	 *  does not automatically cause a change of context unless the user
+	 *  has been advised of the behaviour before using the component."
+	 */
+	focusInputOnCountrySelection: PropTypes.bool.isRequired
 }
 
 PhoneNumberInput.defaultProps = {
@@ -943,7 +957,18 @@ PhoneNumberInput.defaultProps = {
 	 * If set to `true` the phone number input will get trimmed
 	 * if it exceeds the maximum length for the country.
 	 */
-	limitMaxLength: false
+	limitMaxLength: false,
+
+	/**
+	 * If set to `false`, will not focus the `<input/>` component
+	 * when the user selects a country from the list of countries.
+	 * This can be used to conform to the Web Content Accessibility Guidelines (WCAG).
+	 * Quote:
+	 * "On input: Changing the setting of any user interface component
+	 *  does not automatically cause a change of context unless the user
+	 *  has been advised of the behaviour before using the component."
+	 */
+	focusInputOnCountrySelection: true
 }
 
 export default PhoneNumberInput

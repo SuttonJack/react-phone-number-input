@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.1 / xx.10.2020
+==================
+
+* Added `focusInputOnCountrySelection: boolean` property. If set to `false`, will not focus the `<input/>` component when the user selects a country from the list of countries. This can be used to conform to the Web Content Accessibility Guidelines (WCAG). Quote: "On input: Changing the setting of any user interface component does not automatically cause a change of context unless the user has been advised of the behaviour before using the component".
+
 3.1.0 / 23.09.2020
 ==================
 
