@@ -301,7 +301,7 @@ function getMaxNumberLength(country, metadata)
 	metadata = new Metadata(metadata)
 	metadata.country(country)
 	// Return the last "possible length".
-	return metadata.possibleLengths()[metadata.possibleLengths().length - 1]
+	return metadata.numberingPlan.possibleLengths()[metadata.numberingPlan.possibleLengths().length - 1]
 }
 
 // If the phone number being input is an international one
