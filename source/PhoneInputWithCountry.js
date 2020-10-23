@@ -348,20 +348,35 @@ class PhoneNumberInput_ extends React.PureComponent {
 			}
 		}
 
-		// If the default country changed.
+		// `value` is the value currently shown in the component:
+		// it's stored in the component's `state`, and it's not the `value` property.
+		// `prevValue` is "previous `value` property".
+		// `newValue` is "new `value` property".
+
+		// If the default country changed
 		// (e.g. in case of ajax GeoIP detection after page loaded)
-		// then select it but only if the user hasn't already manually
-		// selected a country and no phone number has been entered so far.
+		// then select it, but only if the user hasn't already manually
+		// selected a country, and no phone number has been manually entered so far.
 		// Because if the user has already started inputting a phone number
-		// then he's okay with no country being selected at all ("International")
-		// and doesn't want to be disturbed, doesn't want his input to be screwed, etc.
+		// then they're okay with no country being selected at all ("International")
+		// and they don't want to be disturbed, don't want their input to be screwed, etc.
 		if (newDefaultCountry !== prevDefaultCountry &&
-			!hasUserSelectedACountry && (
-				(!value && !newValue) ||
-				(international &&
-					value === getInitialParsedInput(undefined, prevDefaultCountry, international, metadata) &&
-					value === getInitialParsedInput(undefined, newDefaultCountry, international, metadata)
-				)
+			!hasUserSelectedACountry &&
+			// The `!newValue` check is added here to restrict the dynamically updated
+			// `country` property to cases when no `value` property has been set.
+			!newValue && (
+				// By default, "no value has been entered" means `value` is `undefined`.
+				!value ||
+				// When `international` is `true`, and some country has been pre-selected,
+				// then the `<input/>` contains a pre-filled value of `+${countryCallingCode}${leadingDigits}`,
+				// so in case of `international` being `true`, "the user hasn't entered anything" situation
+				// doesn't just mean `value` is `undefined`, but could also mean `value` is `+${countryCallingCode}`.
+				(international && value === getInitialParsedInput(undefined, undefined, {
+					defaultCountry: prevDefaultCountry,
+					international: true,
+					displayInitialValueAsLocalNumber: undefined,
+					metadata
+				}))
 			)
 		) {
 			if (newDefaultCountry) {
@@ -374,6 +389,9 @@ class PhoneNumberInput_ extends React.PureComponent {
 				country: newDefaultCountry,
 				// If `parsedInput` is empty, then automatically select the new `country`
 				// and set `parsedInput` to `+{getCountryCallingCode(newCountry)}`.
+				// The code assumes that "no phone number has been entered by the user",
+				// and no `value` property has been passed, so the second argument
+				// of `generateInitialParsedInput(value, phoneNumber, props)` is `undefined`.
 				parsedInput: generateInitialParsedInput(newValue, undefined, props)
 				// `value` is `undefined`.
 				// `parsedInput` is `undefined` because `value` is `undefined`.
@@ -841,6 +859,8 @@ PhoneNumberInput.propTypes = {
 
 	/**
 	 * Set to `true` to force "international" phone number format.
+	 * Set to `false` to force "national" phone number format.
+	 * By default it's `undefined` meaning that it doesn't enforce any phone number format.
 	 */
 	international: PropTypes.bool,
 
@@ -989,16 +1009,14 @@ function generateInitialParsedInput(value, phoneNumber, {
 	metadata,
 	displayInitialValueAsLocalNumber
 }) {
-	// If the `value` (E.164 phone number)
-	// belongs to the currently selected country
-	// and `displayInitialValueAsLocalNumber` property is `true`
-	// then convert `value` (E.164 phone number)
-	// to a local phone number digits.
-	// E.g. '+78005553535' -> '88005553535'.
-	if (displayInitialValueAsLocalNumber && phoneNumber && phoneNumber.country) {
-		return generateNationalNumberDigits(phoneNumber)
-	}
-	return getInitialParsedInput(value, defaultCountry, international, metadata)
+	return getInitialParsedInput(
+		value,
+		phoneNumber,
+		defaultCountry,
+		international,
+		displayInitialValueAsLocalNumber,
+		metadata
+	)
 }
 
 let countrySelectOptionsMemo
