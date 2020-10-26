@@ -15,19 +15,24 @@ import {
  * @param  {object} metadata - `libphonenumber-js` metadata
  * @return {string?}
  */
-export function getPreSelectedCountry(phoneNumber, country, countries, includeInternationalOption, metadata)
-{
+export function getPreSelectedCountry({
+	phoneNumber,
+	defaultCountry,
+	countries,
+	required,
+	metadata
+}) {
+	let country = defaultCountry
+
 	// If can get country from E.164 phone number
 	// then it overrides the `country` passed (or not passed).
-	if (phoneNumber && phoneNumber.country)
-	{
+	if (phoneNumber && phoneNumber.country) {
 		// `country` will be left `undefined` in case of non-detection.
 		country = phoneNumber.country
 	}
 
 	// Only pre-select a country if it's in the available `countries` list.
-	if (countries && countries.indexOf(country) < 0)
-	{
+	if (countries && countries.indexOf(country) < 0) {
 		country = undefined
 	}
 
@@ -35,8 +40,7 @@ export function getPreSelectedCountry(phoneNumber, country, countries, includeIn
 	// then some `country` must be selected.
 	// It will still be the wrong country though.
 	// But still country `<select/>` can't be left in a broken state.
-	if (!country && !includeInternationalOption && countries && countries.length > 0)
-	{
+	if (!country && required && countries && countries.length > 0) {
 		country = countries[0]
 	}
 
@@ -50,16 +54,22 @@ export function getPreSelectedCountry(phoneNumber, country, countries, includeIn
  * @param  {boolean} includeInternationalOption - Whether should include "International" option at the top of the list.
  * @return {object[]} A list of objects having shape `{ value : string, label : string }`.
  */
-export function getCountrySelectOptions(
+export function getCountrySelectOptions({
 	countries,
-	country_names,
+	countryNames,
 	includeInternationalOption,
-	locales,
-	compare_strings = compareStrings)
-{
+	// `locales` are only used in country name comparator:
+	// depending on locale, string sorting order could be different.
+	compareStringsLocales,
+	compareStrings: _compareStrings
+}) {
+	// Default country name comparator uses `String.localeCompare()`.
+	if (!_compareStrings) {
+		_compareStrings = compareStrings
+	}
+
 	// Generates a `<Select/>` option for each country.
-	const country_select_options = countries.map((country) =>
-	({
+	const countrySelectOptions = countries.map((country) => ({
 		value: country,
 		// All `locale` country names included in this library
 		// include all countries (this is checked at build time).
@@ -67,22 +77,20 @@ export function getCountrySelectOptions(
 		// is when a developer supplies their own `labels` property.
 		// To guard against such cases, a missing country name
 		// is substituted by country code.
-		label: country_names[country] || country
+		label: countryNames[country] || country
 	}))
 
 	// Sort the list of countries alphabetically.
-	country_select_options.sort((a, b) => compare_strings(a.label, b.label, locales))
+	countrySelectOptions.sort((a, b) => _compareStrings(a.label, b.label, compareStringsLocales))
 
 	// Add the "International" option to the country list (if suitable)
-	if (includeInternationalOption)
-	{
-		country_select_options.unshift
-		({
-			label : country_names.ZZ
+	if (includeInternationalOption) {
+		countrySelectOptions.unshift({
+			label: countryNames.ZZ
 		})
 	}
 
-	return country_select_options
+	return countrySelectOptions
 }
 
 /**
@@ -93,8 +101,7 @@ export function getCountrySelectOptions(
  * @example
  * parsePhoneNumber('+78005553535')
  */
-export function parsePhoneNumber(value, metadata)
-{
+export function parsePhoneNumber(value, metadata) {
 	return parsePhoneNumberFromString(value || '', metadata)
 }
 
@@ -109,65 +116,57 @@ export function parsePhoneNumber(value, metadata)
  * getNationalNumberDigits({ country: 'RU', phone: '8005553535' })
  * // returns '88005553535'
  */
-export function generateNationalNumberDigits(phoneNumber)
-{
+export function generateNationalNumberDigits(phoneNumber) {
 	return phoneNumber.formatNational().replace(/\D/g, '')
 }
 
 /**
  * Migrates parsed `<input/>` `value` for the newly selected `country`.
- * @param {string?} value - The `value` parsed from phone number `<input/>` (it's the `parsed_input` state property, not the `value` property).
- * @param {string?} previousCountry - Previously selected country.
+ * @param {string?} parsedInput - Phone number digits (and `+`) parsed from phone number `<input/>` (it's not the same as the `value` property).
+ * @param {string?} prevCountry - Previously selected country.
  * @param {string?} newCountry - Newly selected country. Can't be same as previously selected country.
  * @param {object} metadata - `libphonenumber-js` metadata.
- * @param {boolean} preferNationalFormat - whether should attempt to convert from international to national number for the new country.
+ * @param {boolean} useNationalFormat - whether should attempt to convert from international to national number for the new country.
  * @return {string?}
  */
-export function migrateParsedInputForNewCountry
-(
-	value,
-	previous_country,
-	new_country,
+export function migrateParsedInputForNewCountry(parsedInput, {
+	prevCountry,
+	newCountry,
 	metadata,
-	preferNationalFormat
-)
-{
+	useNationalFormat
+}) {
 	// If `parsed_input` is empty
 	// then no need to migrate anything.
-	if (!value) {
-		if (preferNationalFormat) {
+	if (!parsedInput) {
+		if (useNationalFormat) {
 			return ''
 		} else {
 			// If `parsedInput` is empty then set `parsedInput` to
 			// `+{getCountryCallingCode(newCountry)}`.
-			return getInternationalPhoneNumberPrefix(new_country, metadata)
+			return getInternationalPhoneNumberPrefix(newCountry, metadata)
 		}
 	}
 
 	// If switching to some country.
 	// (from "International" or another country)
-	// If switching from "International" then `value` starts with a `+`.
+	// If switching from "International" then `parsedInput` starts with a `+`.
 	// Otherwise it may or may not start with a `+`.
-	if (new_country)
-	{
+	if (newCountry) {
 		// If the phone number was entered in international format
 		// then migrate it to the newly selected country.
 		// The phone number may be incomplete.
 		// The phone number entered not necessarily starts with
 		// the previously selected country phone prefix.
-		if (value[0] === '+')
-		{
+		if (parsedInput[0] === '+') {
 			// If the international phone number is for the new country
 			// then convert it to local if required.
-			if (preferNationalFormat)
-			{
+			if (useNationalFormat) {
 				// // If a phone number is being input in international form
 				// // and the country can already be derived from it,
 				// // and if it is the new country, then format as a national number.
-				// const derived_country = getCountryFromPossiblyIncompleteInternationalPhoneNumber(value, metadata)
-				// if (derived_country === new_country)
-				// {
-				// 	return stripCountryCallingCode(value, derived_country, metadata)
+				// const derived_country = getCountryFromPossiblyIncompleteInternationalPhoneNumber(parsedInput, metadata)
+				// if (derived_country === newCountry) {
+				// 	return stripCountryCallingCode(parsedInput, derived_country, metadata)
 				// }
 
 				// Actually, the two countries don't necessarily need to match:
@@ -176,9 +175,8 @@ export function migrateParsedInputForNewCountry
 				// (for example, "NANPA" countries like US, Canada, etc).
 				// The looser condition would be just "same nternational phone number format"
 				// which would mean "same country calling code" in the context of `libphonenumber-js`.
-				if (value.indexOf('+' + getCountryCallingCode(new_country, metadata)) === 0)
-				{
-					return stripCountryCallingCode(value, new_country, metadata)
+				if (parsedInput.indexOf('+' + getCountryCallingCode(newCountry, metadata)) === 0) {
+					return stripCountryCallingCode(parsedInput, newCountry, metadata)
 				}
 
 				// Simply discard the previously entered international phone number,
@@ -191,21 +189,22 @@ export function migrateParsedInputForNewCountry
 				// // Simply strip the leading `+` character
 				// // therefore simply converting all digits into a "local" phone number.
 				// // https://github.com/catamphetamine/react-phone-number-input/issues/287
-				// return value.slice(1)
+				// return parsedInput.slice(1)
 			}
 
-			if (previous_country) {
-				if (getCountryCallingCode(new_country, metadata) === getCountryCallingCode(previous_country, metadata)) {
-					return value
+			if (prevCountry) {
+				const newCountryPrefix = getInternationalPhoneNumberPrefix(newCountry, metadata)
+				if (parsedInput.indexOf(newCountryPrefix) === 0) {
+					return parsedInput
 				} else {
-					return getInternationalPhoneNumberPrefix(new_country, metadata)
+					return newCountryPrefix
 				}
 			} else {
-				const defaultValue = getInternationalPhoneNumberPrefix(new_country, metadata)
+				const defaultValue = getInternationalPhoneNumberPrefix(newCountry, metadata)
 				// If `parsedInput`'s country calling code part is the same
 				// as for the new `country`, then leave `parsedInput` as is.
-				if (value.indexOf(defaultValue) === 0) {
-					return value
+				if (parsedInput.indexOf(defaultValue) === 0) {
+					return parsedInput
 				}
 				// If `parsedInput`'s country calling code part is not the same
 				// as for the new `country`, then set `parsedInput` to
@@ -216,32 +215,30 @@ export function migrateParsedInputForNewCountry
 			// // If the international phone number already contains
 			// // any country calling code then trim the country calling code part.
 			// // (that could also be the newly selected country phone code prefix as well)
-			// // `value` doesn't neccessarily belong to `previous_country`.
+			// // `parsedInput` doesn't neccessarily belong to `prevCountry`.
 			// // (e.g. if a user enters an international number
 			// //  not belonging to any of the reduced `countries` list).
-			// value = stripCountryCallingCode(value, previous_country, metadata)
+			// parsedInput = stripCountryCallingCode(parsedInput, prevCountry, metadata)
 
 			// // Prepend country calling code prefix
 			// // for the newly selected country.
-			// return e164(value, new_country, metadata) || `+${getCountryCallingCode(new_country, metadata)}`
+			// return e164(parsedInput, newCountry, metadata) || `+${getCountryCallingCode(newCountry, metadata)}`
 		}
 	}
 	// If switching to "International" from a country.
-	else
-	{
+	else {
 		// If the phone number was entered in national format.
-		if (value[0] !== '+')
-		{
+		if (parsedInput[0] !== '+') {
 			// Format the national phone number as an international one.
 			// The phone number entered not necessarily even starts with
 			// the previously selected country phone prefix.
 			// Even if the phone number belongs to whole another country
 			// it will still be parsed into some national phone number.
-			return e164(value, previous_country, metadata) || ''
+			return e164(parsedInput, prevCountry, metadata) || ''
 		}
 	}
 
-	return value
+	return parsedInput
 }
 
 /**
@@ -283,8 +280,7 @@ export function e164(number, country, metadata) {
  * @param  {object} metadata - `libphonenumber-js` metadata.
  * @return {string} Can be empty.
  */
-export function trimNumber(number, country, metadata)
-{
+export function trimNumber(number, country, metadata) {
 	const nationalSignificantNumberPart = getNationalSignificantNumberDigits(number, country, metadata)
 	if (nationalSignificantNumberPart) {
 		const overflowDigitsCount = nationalSignificantNumberPart.length - getMaxNumberLength(country, metadata)
@@ -295,8 +291,7 @@ export function trimNumber(number, country, metadata)
 	return number
 }
 
-function getMaxNumberLength(country, metadata)
-{
+function getMaxNumberLength(country, metadata) {
 	// Get "possible lengths" for a phone number of the country.
 	metadata = new Metadata(metadata)
 	metadata.country(country)
@@ -315,17 +310,13 @@ function getMaxNumberLength(country, metadata)
  * @param  {object} metadata - `libphonenumber-js` metadata.
  * @return {string?}
  */
-export function getCountryForPartialE164Number
-(
-	partialE164Number,
+export function getCountryForPartialE164Number(partialE164Number, {
 	country,
 	countries,
-	includeInternationalOption,
+	required,
 	metadata
-)
-{
-	if (partialE164Number === '+')
-	{
+}) {
+	if (partialE164Number === '+') {
 		// Don't change the currently selected country yet.
 		return country
 	}
@@ -335,17 +326,15 @@ export function getCountryForPartialE164Number
 	// If a phone number is being input in international form
 	// and the country can already be derived from it,
 	// then select that country.
-	if (derived_country && (!countries || (countries.indexOf(derived_country) >= 0)))
-	{
+	if (derived_country && (!countries || (countries.indexOf(derived_country) >= 0))) {
 		return derived_country
 	}
 	// If "International" country option has not been disabled
 	// and the international phone number entered doesn't correspond
 	// to the currently selected country then reset the currently selected country.
 	else if (country &&
-		includeInternationalOption &&
-		!couldNumberBelongToCountry(partialE164Number, country, metadata))
-	{
+		!required &&
+		!couldNumberBelongToCountry(partialE164Number, country, metadata)) {
 		return undefined
 	}
 
@@ -356,7 +345,7 @@ export function getCountryForPartialE164Number
 /**
  * Parses `<input/>` value. Derives `country` from `input`. Derives an E.164 `value`.
  * @param  {string?} input — Parsed `<input/>` value. Examples: `""`, `"+"`, `"+123"`, `"123"`.
- * @param  {string?} prevInput — Previous parsed `<input/>` value. Examples: `""`, `"+"`, `"+123"`, `"123"`.
+ * @param  {string?} prevParsedInput — Previous parsed `<input/>` value. Examples: `""`, `"+"`, `"+123"`, `"123"`.
  * @param  {string?} country - Currently selected country.
  * @param  {string[]?} countries - A list of available countries. If not passed then "all countries" are assumed.
  * @param  {boolean} includeInternationalOption - Whether "International" country option is available.
@@ -365,17 +354,15 @@ export function getCountryForPartialE164Number
  * @param  {object} metadata - `libphonenumber-js` metadata.
  * @return {object} An object of shape `{ input, country, value }`.
  */
-export function parseInput(
-	input,
-	prevInput,
+export function parseInput(input, {
+	prevParsedInput,
 	country,
 	defaultCountry,
 	countries,
-	includeInternationalOption,
 	international,
 	limitMaxLength,
 	metadata
-) {
+}) {
 	// If `international` property is `false`, then it means
 	// "enforce national-only format during input",
 	// so, if that's the case, then remove all `+` characters,
@@ -418,7 +405,7 @@ export function parseInput(
 	// resulting in a seemingly correct phone number
 	// but in reality that phone number has incorrect country.
 	// https://github.com/catamphetamine/react-phone-number-input/issues/273
-	if (!input && prevInput && prevInput[0] === '+') {
+	if (!input && prevParsedInput && prevParsedInput[0] === '+') {
 		if (international) {
 			country = undefined
 		} else {
@@ -428,7 +415,7 @@ export function parseInput(
 	// Also resets such "randomly" selected country
 	// as soon as the user erases the number
 	// digit-by-digit up to the leading `+` sign.
-	if (input === '+' && prevInput && prevInput[0] === '+' && prevInput.length > '+'.length) {
+	if (input === '+' && prevParsedInput && prevParsedInput[0] === '+' && prevParsedInput.length > '+'.length) {
 		country = undefined
 	}
 
@@ -448,13 +435,11 @@ export function parseInput(
 	// (regardless of whether there's any country currently selected,
 	//  because there could be several countries corresponding to one country calling code)
 	if (value) {
-		country = getCountryForPartialE164Number(
-			value,
+		country = getCountryForPartialE164Number(value, {
 			country,
 			countries,
-			includeInternationalOption,
 			metadata
-		)
+		})
 		// If `international` property is `false`, then it means
 		// "enforce national-only format during input",
 		// so, if that's the case, then remove all `+` characters,
@@ -477,7 +462,7 @@ export function parseInput(
 function convertInternationalInputToNational(input, country, metadata) {
 	// Handle the case when a user might have pasted
 	// a phone number in international format.
-	if (input.indexOf(`+${getCountryCallingCode(country, metadata)}`) === 0) {
+	if (input.indexOf(getInternationalPhoneNumberPrefix(country, metadata)) === 0) {
 		// Create "as you type" formatter.
 		const formatter = new AsYouType(country, metadata)
 		// Input partial national phone number.
@@ -503,8 +488,7 @@ function convertInternationalInputToNational(input, country, metadata) {
  * @param  {object} metadata - `libphonenumber-js` metadata.
  * @return {string?}
  */
-export function getCountryFromPossiblyIncompleteInternationalPhoneNumber(number, metadata)
-{
+export function getCountryFromPossiblyIncompleteInternationalPhoneNumber(number, metadata) {
 	const formatter = new AsYouType(null, metadata)
 	formatter.input(number)
 	// // `001` is a special "non-geograpical entity" code
@@ -542,37 +526,28 @@ export function compareStrings(a, b, locales) {
  * @param {object} metadata - `libphonenumber-js` metadata.
  * @return {string}
  */
-export function stripCountryCallingCode(number, country, metadata)
-{
+export function stripCountryCallingCode(number, country, metadata) {
 	// Just an optimization, so that it
 	// doesn't have to iterate through all country calling codes.
-	if (country)
-	{
-		const country_calling_prefix = '+' + getCountryCallingCode(country, metadata)
+	if (country) {
+		const countryCallingCodePrefix = '+' + getCountryCallingCode(country, metadata)
 
 		// If `country` fits the actual `number`.
-		if (number.length < country_calling_prefix.length)
-		{
-			if (country_calling_prefix.indexOf(number) === 0)
-			{
+		if (number.length < countryCallingCodePrefix.length) {
+			if (countryCallingCodePrefix.indexOf(number) === 0) {
 				return ''
 			}
-		}
-		else
-		{
-			if (number.indexOf(country_calling_prefix) === 0)
-			{
-				return number.slice(country_calling_prefix.length)
+		} else {
+			if (number.indexOf(countryCallingCodePrefix) === 0) {
+				return number.slice(countryCallingCodePrefix.length)
 			}
 		}
 	}
 
 	// If `country` doesn't fit the actual `number`.
 	// Try all available country calling codes.
-	for (const country_calling_code of Object.keys(metadata.country_calling_codes))
-	{
-		if (number.indexOf(country_calling_code) === '+'.length)
-		{
+	for (const country_calling_code of Object.keys(metadata.country_calling_codes)) {
+		if (number.indexOf(country_calling_code) === '+'.length) {
 			return number.slice('+'.length + country_calling_code.length)
 		}
 	}
@@ -607,10 +582,10 @@ export function getNationalSignificantNumberDigits(number, country, metadata) {
  * @return {boolean}
  */
 export function couldNumberBelongToCountry(number, country, metadata) {
-	const countryCallingCode = getCountryCallingCode(country, metadata)
+	const intlPhoneNumberPrefix = getInternationalPhoneNumberPrefix(country, metadata)
 	let i = 0
-	while (i + 1 < number.length && i < countryCallingCode.length) {
-		if (number[i + 1] !== countryCallingCode[i]) {
+	while (i < number.length && i < intlPhoneNumberPrefix.length) {
+		if (number[i] !== intlPhoneNumberPrefix[i]) {
 			return false
 		}
 		i++
@@ -618,14 +593,21 @@ export function couldNumberBelongToCountry(number, country, metadata) {
 	return true
 }
 
-export function getInitialParsedInput(value, phoneNumber, defaultCountry, international, displayInitialValueAsLocalNumber, metadata) {
+export function getInitialParsedInput({
+	value,
+	phoneNumber,
+	defaultCountry,
+	international,
+	useNationalFormat,
+	metadata
+}) {
 	// If the `value` (E.164 phone number)
 	// belongs to the currently selected country
-	// and `displayInitialValueAsLocalNumber` property is `true`
+	// and `useNationalFormat` is `true`
 	// then convert `value` (E.164 phone number)
 	// to a local phone number digits.
 	// E.g. '+78005553535' -> '88005553535'.
-	if ((international === false || displayInitialValueAsLocalNumber) && phoneNumber && phoneNumber.country) {
+	if ((international === false || useNationalFormat) && phoneNumber && phoneNumber.country) {
 		return generateNationalNumberDigits(phoneNumber)
 	}
 	// If `international` property is `true`,
