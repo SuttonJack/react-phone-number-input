@@ -16,7 +16,10 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 		value: newValue,
 		reset: newReset,
 		international,
-		displayInitialValueAsLocalNumber
+		// `displayInitialValueAsLocalNumber` property has been
+		// superceded by `initialValueFormat` property.
+		displayInitialValueAsLocalNumber,
+		initialValueFormat
 	} = props
 
 	const {
@@ -101,7 +104,7 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 			parsedInput: getInitialParsedInput({
 				value: newValue,
 				defaultCountry: newDefaultCountry,
-				useNationalFormat: displayInitialValueAsLocalNumber,
+				useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
 				international,
 				metadata
 			})
@@ -142,7 +145,7 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 				phoneNumber,
 				value: newValue,
 				defaultCountry: newDefaultCountry,
-				useNationalFormat: displayInitialValueAsLocalNumber,
+				useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
 				international,
 				metadata
 			}),

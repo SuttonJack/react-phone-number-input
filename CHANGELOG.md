@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.2 / 26.10.2020
+==================
+
+* `displayInitialValueAsLocalNumber={true}` property is deprecated: it has been replaced with `initialValueFormat="national"` property. The old property still works in version `3.x`.
+
 3.1.1 / 24.10.2020
 ==================
 

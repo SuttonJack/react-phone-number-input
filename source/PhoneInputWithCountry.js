@@ -47,7 +47,10 @@ class PhoneNumberInput_ extends React.PureComponent {
 			labels,
 			international,
 			addInternationalOption,
+			// `displayInitialValueAsLocalNumber` property has been
+			// superceded by `initialValueFormat` property.
 			displayInitialValueAsLocalNumber,
+			initialValueFormat,
 			metadata,
 			countryOptionsOrder
 		} = this.props
@@ -107,7 +110,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 				phoneNumber,
 				defaultCountry,
 				international,
-				useNationalFormat: displayInitialValueAsLocalNumber,
+				useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
 				metadata
 			}),
 
@@ -349,7 +352,10 @@ class PhoneNumberInput_ extends React.PureComponent {
 			flagUrl,
 			addInternationalOption,
 			internationalIcon,
+			// `displayInitialValueAsLocalNumber` property has been
+			// superceded by `initialValueFormat` property.
 			displayInitialValueAsLocalNumber,
+			initialValueFormat,
 			onCountryChange,
 			limitMaxLength,
 			reset,
@@ -501,14 +507,14 @@ PhoneNumberInput.propTypes = {
 	autoComplete: PropTypes.string.isRequired,
 
 	/**
-	 * Set to `true` to show the initial `value` in
+	 * Set to `"national"` to show the initial `value` in
 	 * "national" format rather than "international".
 	 *
-	 * For example, if this flag is set to `true`
+	 * For example, if `initialValueFormat` is `"national"`
 	 * and the initial `value="+12133734253"` is passed
 	 * then the `<input/>` value will be `"(213) 373-4253"`.
 	 *
-	 * By default, this flag is set to `false`,
+	 * By default, `initialValueFormat` is `undefined`,
 	 * meaning that if the initial `value="+12133734253"` is passed
 	 * then the `<input/>` value will be `"+1 213 373 4253"`.
 	 *
@@ -519,8 +525,12 @@ PhoneNumberInput.propTypes = {
 	 * writing phone numbers in international format rather than in local format.
 	 * Future people won't be using "national" format, only "international".
 	 */
-	// (is `false` by default)
-	displayInitialValueAsLocalNumber: PropTypes.bool.isRequired,
+	// (is `undefined` by default)
+	initialValueFormat: PropTypes.oneOf(['national']),
+
+	// `displayInitialValueAsLocalNumber` property has been
+	// superceded by `initialValueFormat` property.
+	displayInitialValueAsLocalNumber: PropTypes.bool,
 
 	/**
 	 * The country to be selected by default.
@@ -828,15 +838,8 @@ PhoneNumberInput.defaultProps = {
 	reset: PropTypes.any,
 
 	/**
-	 * Don't convert the initially passed phone number `value`
-	 * to a national phone number for its country.
-	 * The reason is that the newer generation grows up when
-	 * there are no stationary phones and therefore everyone inputs
-	 * phone numbers with a `+` in their smartphones
-	 * so phone numbers written in international form
-	 * are gradually being considered more natural than local ones.
+	 *
 	 */
-	displayInitialValueAsLocalNumber: false,
 
 	/**
 	 * Set to `false` to use "basic" caret instead of the "smart" one.

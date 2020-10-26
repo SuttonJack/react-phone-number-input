@@ -837,18 +837,18 @@ import ru from 'react-phone-number-input/locale/ru'
 
 								<section>
 									<h1>
-										display&#8203;Initial&#8203;Value&#8203;As&#8203;Local&#8203;Number = false <span style={{ fontWeight: 'normal', opacity: 0.6 }}>(default)</span>
+										<code className="default">initialValueFormat&#8203;=&#8203;"national"</code>
 									</h1>
 
 									<p>
-										If an initial <code>value</code> is passed, then it's formatted in international format (by default).
+										If an initial <code>value</code> is passed, and <code>initialValueFormat</code> property is not set, then the initial <code>value</code> is formatted in international format.
 									</p>
 
 									<form>
 										<PhoneInput
 											placeholder="Enter phone number"
-											value={this.state.value_convert_to_national_false}
-											onChange={value => this.setState({ value_convert_to_national_false: value })}/>
+											value={this.state.value_convert_to_national_true}
+											onChange={value => this.setState({ value_convert_to_national_true: value })}/>
 									</form>
 
 									<Highlight lang="jsx">
@@ -857,15 +857,9 @@ import ru from 'react-phone-number-input/locale/ru'
   onChange={setValue}/>
 `}
 									</Highlight>
-								</section>
-
-								<section>
-									<h1>
-										display&#8203;Initial&#8203;Value&#8203;As&#8203;Local&#8203;Number = true
-									</h1>
 
 									<p>
-										If an initial <code>value</code> is passed, and <code>display&#8203;Initial&#8203;Value&#8203;As&#8203;Local&#8203;Number</code> is <code>true</code>, then the initial <code>value</code> is formatted in national format.
+										If an initial <code>value</code> is passed, and <code>initialValueFormat</code> is <code>"national"</code>, then the initial <code>value</code> is formatted in national format.
 									</p>
 
 									<form>
@@ -873,12 +867,12 @@ import ru from 'react-phone-number-input/locale/ru'
 											placeholder="Enter phone number"
 											value={this.state.value_convert_to_national_true}
 											onChange={value => this.setState({ value_convert_to_national_true: value })}
-											displayInitialValueAsLocalNumber/>
+											initialValueFormat="national"/>
 									</form>
 
 									<Highlight lang="jsx">
 {`<PhoneInput
-  displayInitialValueAsLocalNumber
+  initialValueFormat="national"
   value={value}
   onChange={setValue}/>
 `}
@@ -1501,7 +1495,7 @@ const [country, setCountry] = useState()
 								onChange={value => this.setState({ dynamic_value: value })}/>
 
 							<p>
-								displayInitialValueAsLocalNumber:
+								<code>initialValueFormat="national"</code>
 							</p>
 
 							<PhoneInput
@@ -1509,7 +1503,7 @@ const [country, setCountry] = useState()
 								defaultCountry={this.state.dynamic_country}
 								value={this.state.dynamic_value}
 								onChange={value => this.setState({ dynamic_value: value })}
-								displayInitialValueAsLocalNumber/>
+								initialValueFormat="national"/>
 
 							<p>
 								<button
