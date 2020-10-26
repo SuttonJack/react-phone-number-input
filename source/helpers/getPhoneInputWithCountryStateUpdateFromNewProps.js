@@ -1,5 +1,5 @@
 import {
-	getInitialParsedInput,
+	getInitialPhoneDigits,
 	parsePhoneNumber
 } from './phoneInputHelpers'
 
@@ -38,6 +38,13 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 		hasUserSelectedACountry
 	} = state
 
+	const _getInitialPhoneDigits = (parameters) => getInitialPhoneDigits({
+		...parameters,
+		international,
+		useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
+		metadata
+	})
+
 	// Some users requested a way to reset the component
 	// (both number `<input/>` and country `<select/>`).
 	// Whenever `reset` property changes both number `<input/>`
@@ -51,7 +58,10 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 	// https://github.com/catamphetamine/react-phone-number-input/issues/300
 	if (newReset !== prevReset) {
 		return {
-			parsedInput: undefined,
+			phoneDigits: _getInitialPhoneDigits({
+				value: undefined,
+				defaultCountry: newDefaultCountry
+			}),
 			value: undefined,
 			country: newDefaultCountry,
 			hasUserSelectedACountry: undefined
@@ -71,6 +81,7 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 	// then they're okay with no country being selected at all ("International")
 	// and they don't want to be disturbed, don't want their input to be screwed, etc.
 	if (newDefaultCountry !== prevDefaultCountry &&
+		isCountrySupportedWithError(newDefaultCountry, metadata) &&
 		!hasUserSelectedACountry &&
 		// The `!newValue` check is added here to restrict the dynamically updated
 		// `country` property to cases when no `value` property has been set.
@@ -81,35 +92,25 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 			// then the `<input/>` contains a pre-filled value of `+${countryCallingCode}${leadingDigits}`,
 			// so in case of `international` being `true`, "the user hasn't entered anything" situation
 			// doesn't just mean `value` is `undefined`, but could also mean `value` is `+${countryCallingCode}`.
-			(international && value === getInitialParsedInput({
+			(international && value === _getInitialPhoneDigits({
 				value: undefined,
-				defaultCountry: prevDefaultCountry,
-				international: true,
-				metadata
+				defaultCountry: prevDefaultCountry
 			}))
 		)
 	) {
-		if (newDefaultCountry) {
-			if (!isCountrySupportedWithError(newDefaultCountry, metadata)) {
-				newDefaultCountry = prevDefaultCountry
-			}
-		}
 		return {
 			country: newDefaultCountry,
-			// If `parsedInput` is empty, then automatically select the new `country`
-			// and set `parsedInput` to `+{getCountryCallingCode(newCountry)}`.
+			// If `phoneDigits` is empty, then automatically select the new `country`
+			// and set `phoneDigits` to `+{getCountryCallingCode(newCountry)}`.
 			// The code assumes that "no phone number has been entered by the user",
 			// and no `value` property has been passed, so the `phoneNumber` parameter
-			// of `getInitialParsedInput({ value, phoneNumber, ... })` is `undefined`.
-			parsedInput: getInitialParsedInput({
+			// of `_getInitialPhoneDigits({ value, phoneNumber, ... })` is `undefined`.
+			phoneDigits: _getInitialPhoneDigits({
 				value: newValue,
-				defaultCountry: newDefaultCountry,
-				useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
-				international,
-				metadata
+				defaultCountry: newDefaultCountry
 			})
 			// `value` is `undefined`.
-			// `parsedInput` is `undefined` because `value` is `undefined`.
+			// `phoneDigits` is `undefined` because `value` is `undefined`.
 		}
 	}
 	// If a new `value` is set externally.
@@ -128,6 +129,8 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 		let parsedCountry
 		if (phoneNumber) {
 			const supportedCountries = getSupportedCountries(countries, metadata)
+			// Ignore `else` because all countries are supported in metadata.
+			/* istanbul ignore next */
 			if (!supportedCountries || supportedCountries.indexOf(phoneNumber.country) >= 0) {
 				parsedCountry = phoneNumber.country
 			}
@@ -141,13 +144,10 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 		}
 		return {
 			...hasUserSelectedACountryUpdate,
-			parsedInput: getInitialParsedInput({
+			phoneDigits: _getInitialPhoneDigits({
 				phoneNumber,
 				value: newValue,
-				defaultCountry: newDefaultCountry,
-				useNationalFormat: displayInitialValueAsLocalNumber || initialValueFormat === 'national',
-				international,
-				metadata
+				defaultCountry: newDefaultCountry
 			}),
 			value: newValue,
 			country: newValue ? parsedCountry : newDefaultCountry
@@ -156,7 +156,7 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 
 	// `defaultCountry` didn't change.
 	// `value` didn't change.
-	// `parsedInput` didn't change, because `value` didn't change.
+	// `phoneDigits` didn't change, because `value` didn't change.
 	//
 	// So no need to update state.
 }

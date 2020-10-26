@@ -21,7 +21,12 @@ export function createInput(defaultMetadata)
 		const format = useCallback((value) => {
 			// "As you type" formatter.
 			const formatter = new AsYouType(country, metadata)
-			const prefix = getInputValuePrefix(country, international, withCountryCallingCode, metadata)
+			const prefix = getInputValuePrefix({
+				country,
+				international,
+				withCountryCallingCode,
+				metadata
+			})
 			// Format the number.
 			let text = formatter.input(prefix + value)
 			let template = formatter.getTemplate()

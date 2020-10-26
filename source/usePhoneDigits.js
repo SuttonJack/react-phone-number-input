@@ -22,7 +22,7 @@ export default function usePhoneDigits({
 		console.error(`[react-phone-number-input] Expected phone number ${value} to correspond to country ${country} but ${actualCountry ? 'in reality it corresponds to country ' + actualCountry : 'it doesn\'t'}.`)
 		countryMismatchDetected.current = true
 	}
-	const getInitialParsedInput = () => getParsedInputForValue(
+	const getInitialPhoneDigits = () => getPhoneDigitsForValue(
 		value,
 		country,
 		international,
@@ -37,48 +37,49 @@ export default function usePhoneDigits({
 	// This is only used to detect `defaultCountry` property change.
 	const [prevDefaultCountry, setPrevDefaultCountry] = useState(defaultCountry)
 	// `phoneDigits` is the `value` passed to the `<input/>`.
-	const [phoneDigits, setPhoneDigits] = useState(getInitialParsedInput())
+	const [phoneDigits, setPhoneDigits] = useState(getInitialPhoneDigits())
 	// This is only used to detect `value` property changes.
-	const [valueForParsedInput, setValueForParsedInput] = useState(value)
+	const [valueForPhoneDigits, setValueForPhoneDigits] = useState(value)
 	// Rerender hack.
 	const [rerenderTrigger, setRerenderTrigger] = useState()
 	const rerender = useCallback(() => setRerenderTrigger({}), [setRerenderTrigger])
 	// If `value` property has been changed externally
 	// then re-initialize the component.
 	useEffect(() => {
-		if (value !== valueForParsedInput) {
-			setValueForParsedInput(value)
-			setPhoneDigits(getInitialParsedInput())
+		if (value !== valueForPhoneDigits) {
+			setValueForPhoneDigits(value)
+			setPhoneDigits(getInitialPhoneDigits())
 		}
 	}, [value])
 	// If the `country` has been changed then re-initialize the component.
 	useEffect(() => {
 		if (country !== prevCountry) {
 			setPrevCountry(country)
-			setPhoneDigits(getInitialParsedInput())
+			setPhoneDigits(getInitialPhoneDigits())
 		}
 	}, [country])
 	// If the `defaultCountry` has been changed then re-initialize the component.
 	useEffect(() => {
 		if (defaultCountry !== prevDefaultCountry) {
 			setPrevDefaultCountry(defaultCountry)
-			setPhoneDigits(getInitialParsedInput())
+			setPhoneDigits(getInitialPhoneDigits())
 		}
 	}, [defaultCountry])
-	// Update the `value` after `valueForParsedInput` has been updated.
+	// Update the `value` after `valueForPhoneDigits` has been updated.
 	useEffect(() => {
-		if (valueForParsedInput !== value) {
-			onChange(valueForParsedInput)
+		if (valueForPhoneDigits !== value) {
+			onChange(valueForPhoneDigits)
 		}
-	}, [valueForParsedInput])
+	}, [valueForPhoneDigits])
 	const onSetPhoneDigits = useCallback((phoneDigits) => {
 		let value
 		if (country) {
 			if (international && withCountryCallingCode) {
 				// The `<input/>` value must start with the country calling code.
-				if (phoneDigits.indexOf(getInternationalPhoneNumberPrefix(country, metadata)) !== 0) {
-					// Undo the `<input/>` value change if it doesn't:
-					// Force a re-render of the `<input/>` with previous `phoneDigits` value.
+				const prefix = getInternationalPhoneNumberPrefix(country, metadata)
+				if (phoneDigits.indexOf(prefix) !== 0) {
+					// // Reset phone digits if they don't start with the correct prefix.
+					// // Undo the `<input/>` value change if it doesn't.
 					if (countryMismatchDetected.current) {
 						// In case of a `country`/`value` mismatch,
 						// if it performed an "undo" here, then
@@ -86,6 +87,17 @@ export default function usePhoneDigits({
 						// so this special case at least allows phone number editing
 						// when `value` already doesn't match the `country`.
 					} else {
+						// If it simply did `phoneDigits = prefix` here,
+						// then it could have no effect when erasing phone number
+						// via Backspace, because `phoneDigits` in `state` wouldn't change
+						// as a result, because it was `prefix` and it became `prefix`,
+						// so the component wouldn't rerender, and the user would be able
+						// to erase the country calling code part, and that part is
+						// assumed to be non-eraseable. That's why the component is
+						// forcefully rerendered here.
+						setPhoneDigits(prefix)
+						setValueForPhoneDigits(undefined)
+						// Force a re-render of the `<input/>` with previous `phoneDigits` value.
 						return rerender()
 					}
 				}
@@ -122,7 +134,7 @@ export default function usePhoneDigits({
 			}
 		}
 		setPhoneDigits(phoneDigits)
-		setValueForParsedInput(value)
+		setValueForPhoneDigits(value)
 	}, [
 		country,
 		international,
@@ -130,7 +142,7 @@ export default function usePhoneDigits({
 		defaultCountry,
 		metadata,
 		setPhoneDigits,
-		setValueForParsedInput,
+		setValueForPhoneDigits,
 		rerender,
 		countryMismatchDetected
 	])
@@ -151,7 +163,7 @@ export default function usePhoneDigits({
  * @param  {object} metadata
  * @return {string}
  */
-function getParsedInputForValue(
+function getPhoneDigitsForValue(
 	value,
 	country,
 	international,

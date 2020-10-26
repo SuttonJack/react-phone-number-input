@@ -236,6 +236,9 @@ To render just a phone number input component without country `<select/>`:
 
 ```js
 import PhoneInput from 'react-phone-number-input/input'
+// import PhoneInput from 'react-phone-number-input/input-core'
+// import PhoneInput from 'react-phone-number-input/input-max'
+// import PhoneInput from 'react-phone-number-input/input-mobile'
 
 function Example() {
   // `value` will be the parsed phone number in E.164 format.

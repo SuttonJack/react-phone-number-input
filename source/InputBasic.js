@@ -21,7 +21,12 @@ export function createInput(defaultMetadata) {
 		inputComponent: Input,
 		...rest
 	}, ref) {
-		const prefix = getInputValuePrefix(country, international, withCountryCallingCode, metadata)
+		const prefix = getInputValuePrefix({
+			country,
+			international,
+			withCountryCallingCode,
+			metadata
+		})
 
 		const _onChange = useCallback((event) => {
 			let newValue = parseIncompletePhoneNumber(event.target.value)

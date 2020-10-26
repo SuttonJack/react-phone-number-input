@@ -28,9 +28,9 @@ import {
 	getCountrySelectOptions,
 	parsePhoneNumber,
 	generateNationalNumberDigits,
-	migrateParsedInputForNewCountry,
-	getInitialParsedInput,
-	parseInput,
+	getPhoneDigitsForNewCountry,
+	getInitialPhoneDigits,
+	onPhoneDigitsChange,
 	e164
 } from './helpers/phoneInputHelpers'
 
@@ -95,17 +95,17 @@ class PhoneNumberInput_ extends React.PureComponent {
 			// (which could potentially contain unsupported countries).
 			countries,
 
-			// `parsedInput` state property holds non-formatted user's input.
+			// `phoneDigits` state property holds non-formatted user's input.
 			// The reason is that there's no way of finding out
 			// in which form should `value` be displayed: international or national.
 			// E.g. if `value` is `+78005553535` then it could be input
 			// by a user both as `8 (800) 555-35-35` and `+7 800 555 35 35`.
-			// Hence storing just `value`is not sufficient for correct formatting.
+			// Hence storing just `value` is not sufficient for correct formatting.
 			// E.g. if a user entered `8 (800) 555-35-35`
-			// then value is `+78005553535` and `parsedInput` is `88005553535`
+			// then value is `+78005553535` and `phoneDigits` are `88005553535`
 			// and if a user entered `+7 800 555 35 35`
-			// then value is `+78005553535` and `parsedInput` is `+78005553535`.
-			parsedInput: getInitialParsedInput({
+			// then value is `+78005553535` and `phoneDigits` are `+78005553535`.
+			phoneDigits: getInitialPhoneDigits({
 				value,
 				phoneNumber,
 				defaultCountry,
@@ -117,10 +117,10 @@ class PhoneNumberInput_ extends React.PureComponent {
 			// `value` property is duplicated in state.
 			// The reason is that `getDerivedStateFromProps()`
 			// needs this `value` to compare to the new `value` property
-			// to find out if `parsedInput` needs updating:
+			// to find out if `phoneDigits` needs updating:
 			// If the `value` property was changed externally
 			// then it won't be equal to `state.value`
-			// in which case `parsedInput` and `country` should be updated.
+			// in which case `phoneDigits` and `country` should be updated.
 			value
 		}
 	}
@@ -166,14 +166,14 @@ class PhoneNumberInput_ extends React.PureComponent {
 		} = this.props
 
 		const {
-			parsedInput: prevParsedInput,
+			phoneDigits: prevPhoneDigits,
 			country: prevCountry
 		} = this.state
 
 		// After the new `country` has been selected,
 		// if the phone number `<input/>` holds any digits
 		// then migrate those digits for the new `country`.
-		const newParsedInput = migrateParsedInputForNewCountry(prevParsedInput, {
+		const newPhoneDigits = getPhoneDigitsForNewCountry(prevPhoneDigits, {
 			prevCountry,
 			newCountry,
 			metadata,
@@ -182,7 +182,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			useNationalFormat: !international
 		})
 
-		const newValue = e164(newParsedInput, newCountry, metadata)
+		const newValue = e164(newPhoneDigits, newCountry, metadata)
 
 		// Focus phone number `<input/>` upon country selection.
 		if (focusInputOnCountrySelection) {
@@ -197,7 +197,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 		this.setState({
 			country: newCountry,
 			hasUserSelectedACountry: true,
-			parsedInput: newParsedInput,
+			phoneDigits: newPhoneDigits,
 			value: newValue
 		},
 		() => {
@@ -214,7 +214,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 	 * Updates `value` property accordingly (so that they are kept in sync).
 	 * @param {string?} input — Either a parsed phone number or an empty string. Examples: `""`, `"+"`, `"+123"`, `"123"`.
 	 */
-	onChange = (_input) => {
+	onChange = (_phoneDigits) => {
 		const {
 			defaultCountry,
 			onChange,
@@ -227,16 +227,16 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 		const {
 			countries,
-			parsedInput,
+			phoneDigits: prevPhoneDigits,
 			country: currentlySelectedCountry
 		} = this.state
 
 		const {
-			input,
+			phoneDigits,
 			country,
 			value
-		} = parseInput(_input, {
-			prevParsedInput: parsedInput,
+		} = onPhoneDigitsChange(_phoneDigits, {
+			prevPhoneDigits,
 			country: currentlySelectedCountry,
 			defaultCountry,
 			countries,
@@ -247,7 +247,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 		})
 
 		this.setState({
-			parsedInput: input,
+			phoneDigits,
 			value,
 			country
 		},
@@ -312,7 +312,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 	// `state` holds previous props as `props`, and also:
 	// * `country` — The currently selected country, e.g. `"RU"`.
 	// * `value` — The currently entered phone number (E.164), e.g. `+78005553535`.
-	// * `parsedInput` — The parsed `<input/>` value, e.g. `8005553535`.
+	// * `phoneDigits` — The parsed `<input/>` value, e.g. `8005553535`.
 	// (and a couple of other less significant properties)
 	static getDerivedStateFromProps(props, state) {
 		return {
@@ -371,7 +371,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 		const {
 			country,
-			parsedInput,
+			phoneDigits,
 			isFocused
 		} = this.state
 
@@ -426,7 +426,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 					name={name}
 					metadata={metadata}
 					country={country}
-					value={parsedInput || ''}
+					value={phoneDigits || ''}
 					onChange={this.onChange}
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}
