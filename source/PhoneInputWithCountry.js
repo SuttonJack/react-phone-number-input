@@ -14,7 +14,7 @@ import {
 	getSupportedCountries,
 	getSupportedCountryOptions,
 	getCountries
-} from './countries'
+} from './helpers/countries'
 
 import { createCountryIconComponent } from './CountryIcon'
 
@@ -32,9 +32,9 @@ import {
 	getInitialParsedInput,
 	parseInput,
 	e164
-} from './phoneInputHelpers'
+} from './helpers/phoneInputHelpers'
 
-import getPhoneInputWithCountryStateUpdateFromNewProps from './getPhoneInputWithCountryStateUpdateFromNewProps'
+import getPhoneInputWithCountryStateUpdateFromNewProps from './helpers/getPhoneInputWithCountryStateUpdateFromNewProps'
 
 class PhoneNumberInput_ extends React.PureComponent {
 	inputRef = React.createRef()

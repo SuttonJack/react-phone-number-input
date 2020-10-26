@@ -5,6 +5,8 @@ import {
 	Metadata
 } from 'libphonenumber-js/core'
 
+import getInternationalPhoneNumberPrefix from './getInternationalPhoneNumberPrefix'
+
 /**
  * Decides which country should be pre-selected
  * when the phone number input component is first mounted.
@@ -617,18 +619,4 @@ export function getInitialParsedInput({
 		return getInternationalPhoneNumberPrefix(defaultCountry, metadata)
 	}
 	return value
-}
-
-const ONLY_DIGITS_REGEXP = /^\d+$/
-export function getInternationalPhoneNumberPrefix(country, metadata) {
-	// Standard international phone number prefix: "+" and "country calling code".
-	let prefix = '+' + getCountryCallingCode(country, metadata)
-	// Get "leading digits" for a phone number of the country.
-	// If there're "leading digits" then they can be part of the prefix too.
-	metadata = new Metadata(metadata)
-	metadata.country(country)
-	if (metadata.numberingPlan.leadingDigits() && ONLY_DIGITS_REGEXP.test(metadata.numberingPlan.leadingDigits())) {
-		prefix += metadata.numberingPlan.leadingDigits()
-	}
-	return prefix
 }

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { parseIncompletePhoneNumber, formatIncompletePhoneNumber } from 'libphonenumber-js/core'
 
-import { getInputValuePrefix, removeInputValuePrefix } from './inputValuePrefix'
+import { getInputValuePrefix, removeInputValuePrefix } from './helpers/inputValuePrefix'
 
 export function createInput(defaultMetadata) {
 	/**

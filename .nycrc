@@ -7,7 +7,8 @@
     "text-summary"
   ],
   "include": [
-    "source/phoneInputHelpers.js"
+    "source/helpers/phoneInputHelpers.js",
+    "source/helpers/getInternationalPhoneNumberPrefix.js"
   ],
   "exclude": [
     "**/*.test.js"

@@ -1,6 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { AsYouType, getCountryCallingCode, parseDigits } from 'libphonenumber-js/core'
 
+import getInternationalPhoneNumberPrefix from './helpers/getInternationalPhoneNumberPrefix'
+
 /**
  * Returns `[phoneDigits, setPhoneDigits]`.
  * "Phone digits" includes not only "digits" but also a `+` sign.
@@ -74,8 +76,7 @@ export default function usePhoneDigits({
 		if (country) {
 			if (international && withCountryCallingCode) {
 				// The `<input/>` value must start with the country calling code.
-				const countryCallingCode = '+' + getCountryCallingCode(country, metadata)
-				if (phoneDigits.indexOf(countryCallingCode) !== 0) {
+				if (phoneDigits.indexOf(getInternationalPhoneNumberPrefix(country, metadata)) !== 0) {
 					// Undo the `<input/>` value change if it doesn't:
 					// Force a re-render of the `<input/>` with previous `phoneDigits` value.
 					if (countryMismatchDetected.current) {
@@ -161,7 +162,7 @@ function getParsedInputForValue(
 	onCountryMismatch
 ) {
 	if (country && international && withCountryCallingCode) {
-		const prefix = '+' + getCountryCallingCode(country, metadata)
+		const prefix = getInternationalPhoneNumberPrefix(country, metadata)
 		if (value) {
 			if (value.indexOf(prefix) !== 0) {
 				onCountryMismatch(value, country)
