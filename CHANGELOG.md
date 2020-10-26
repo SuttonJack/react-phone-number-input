@@ -5,6 +5,8 @@
 
 * `displayInitialValueAsLocalNumber={true}` property is deprecated: it has been replaced with `initialValueFormat="national"` property. The old property still works in version `3.x`.
 
+* [Added](https://github.com/catamphetamine/react-phone-number-input/issues/367) `countryCallingCodeEditable={false}` property on a "with country select" component: when `international` is `true`, then, by default, the "country calling code" part of a phone number is editable. Passing `countryCallingCodeEditable={false}` property makes it non-editable.
+
 3.1.1 / 24.10.2020
 ==================
 

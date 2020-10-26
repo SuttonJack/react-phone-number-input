@@ -363,8 +363,21 @@ export function parseInput(input, {
 	countries,
 	international,
 	limitMaxLength,
+	countryCallingCodeEditable,
 	metadata
 }) {
+	if (international && !countryCallingCodeEditable) {
+		const prefix = getInternationalPhoneNumberPrefix(country, metadata)
+		// The `<input/>` value must start with the country calling code.
+		if (input.indexOf(prefix) !== 0) {
+			return {
+				input: prefix,
+				value: undefined,
+				country
+			}
+		}
+	}
+
 	// If `international` property is `false`, then it means
 	// "enforce national-only format during input",
 	// so, if that's the case, then remove all `+` characters,

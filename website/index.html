@@ -781,32 +781,32 @@ import ru from 'react-phone-number-input/locale/ru'
   onChange={setValue}/>
 `}
 									</Highlight>
-								</section>
-	{/*
-								<section>
-									<h1>
-										Force international format and <code className="default">country</code>
-									</h1>
+
+									<p>
+										In the example above, the "country calling code" part of a phone number is editable. To make it non-editable, pass <code>countryCallingCodeEditable={'{false}'}</code> property.
+									</p>
 
 									<form>
 										<PhoneInput
 											international
-											country="RU"
+											countryCallingCodeEditable={false}
+											defaultCountry="RU"
 											placeholder="Enter phone number"
-											value={this.state.valueForceInternational}
-											onChange={value => this.setState({ valueForceInternational: value })}/>
+											value={this.state.valueForceInternationalAndCallingCodeNotEditable}
+											onChange={value => this.setState({ valueForceInternationalAndCallingCodeNotEditable: value })}/>
 									</form>
 
 									<Highlight lang="jsx">
 {`<PhoneInput
   international
-  country="RU"
+  countryCallingCodeEditable={false}
+  defaultCountry="RU"
   value={value}
   onChange={setValue}/>
 `}
 									</Highlight>
 								</section>
-	*/}
+
 								<section>
 									<h1>
 										Force national format

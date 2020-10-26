@@ -221,6 +221,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			addInternationalOption,
 			international,
 			limitMaxLength,
+			countryCallingCodeEditable,
 			metadata
 		} = this.props
 
@@ -241,6 +242,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			countries,
 			international,
 			limitMaxLength,
+			countryCallingCodeEditable,
 			metadata
 		})
 
@@ -358,6 +360,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			initialValueFormat,
 			onCountryChange,
 			limitMaxLength,
+			countryCallingCodeEditable,
 			reset,
 			metadata,
 			international,
@@ -757,6 +760,13 @@ PhoneNumberInput.propTypes = {
 	limitMaxLength: PropTypes.bool.isRequired,
 
 	/**
+	 * If set to `false`, and `international` is `true`, then
+	 * users won't be able to erase the "country calling part"
+	 * of a phone number in the `<input/>`.
+	 */
+	countryCallingCodeEditable: PropTypes.bool.isRequired,
+
+	/**
 	 * `libphonenumber-js` metadata.
 	 *
 	 * Can be used to pass custom `libphonenumber-js` metadata
@@ -857,6 +867,13 @@ PhoneNumberInput.defaultProps = {
 	 * if it exceeds the maximum length for the country.
 	 */
 	limitMaxLength: false,
+
+	/**
+	 * If set to `false`, and `international` is `true`, then
+	 * users won't be able to erase the "country calling part"
+	 * of a phone number in the `<input/>`.
+	 */
+	countryCallingCodeEditable: true,
 
 	/**
 	 * If set to `false`, will not focus the `<input/>` component
