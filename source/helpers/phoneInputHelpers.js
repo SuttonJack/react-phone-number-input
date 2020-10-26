@@ -366,7 +366,7 @@ export function parseInput(input, {
 	countryCallingCodeEditable,
 	metadata
 }) {
-	if (international && !countryCallingCodeEditable) {
+	if (international && countryCallingCodeEditable === false) {
 		const prefix = getInternationalPhoneNumberPrefix(country, metadata)
 		// The `<input/>` value must start with the country calling code.
 		if (input.indexOf(prefix) !== 0) {
