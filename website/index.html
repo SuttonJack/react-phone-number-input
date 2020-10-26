@@ -821,8 +821,8 @@ import ru from 'react-phone-number-input/locale/ru'
 											international={false}
 											defaultCountry="RU"
 											placeholder="Enter phone number"
-											value={this.state.valueForceInternational}
-											onChange={value => this.setState({ valueForceInternational: value })}/>
+											value={this.state.valueForceNational}
+											onChange={value => this.setState({ valueForceNational: value })}/>
 									</form>
 
 									<Highlight lang="jsx">
@@ -837,7 +837,7 @@ import ru from 'react-phone-number-input/locale/ru'
 
 								<section>
 									<h1>
-										<code className="default">initialValueFormat&#8203;=&#8203;"national"</code>
+										<code className="default">initialValueFormat</code>
 									</h1>
 
 									<p>
@@ -1301,7 +1301,7 @@ International: {value && formatPhoneNumberIntl(value)}
 									</p>
 
 									<p>
-										This library exports <code>getCountries()</code> and <code>getCountryCallingCode(country)</code> functions so that a developer could construct their own country <code>&lt;select/&gt;</code>.
+										This library exports <code>getCountries()</code> and <code>getCountryCallingCode(country)</code> functions that a developer could use to construct their own country <code>&lt;select/&gt;</code>.
 									</p>
 
 									<p>
