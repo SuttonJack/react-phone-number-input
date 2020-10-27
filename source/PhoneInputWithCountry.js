@@ -361,6 +361,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			onCountryChange,
 			limitMaxLength,
 			countryCallingCodeEditable,
+			focusInputOnCountrySelection,
 			reset,
 			metadata,
 			international,
