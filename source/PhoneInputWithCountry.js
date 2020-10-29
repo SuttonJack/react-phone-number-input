@@ -816,7 +816,7 @@ PhoneNumberInput.defaultProps = {
 	 * By default, uses icons from `country-flag-icons` gitlab pages website.
 	 */
 	// Must be equal to `flagUrl` in `./CountryIcon.js`.
-	flagUrl: 'https://catamphetamine.gitlab.io/country-flag-icons/3x2/{XX}.svg',
+	flagUrl: 'https://purecatamphetamine.github.io/country-flag-icons/3x2/{XX}.svg',
 
 	/**
 	 * Default "International" country `<select/>` option icon.
