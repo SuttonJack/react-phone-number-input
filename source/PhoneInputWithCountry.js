@@ -403,7 +403,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 				getCountrySelectOptions({
 					countries: countries || getCountries(metadata),
 					countryNames: labels,
-					addInternationalOption,
+					addInternationalOption: (international && countryCallingCodeEditable === false) ? false : addInternationalOption,
 					compareStringsLocales: locales,
 					// compareStrings
 				}),
