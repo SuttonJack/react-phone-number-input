@@ -78,27 +78,36 @@ export default function usePhoneDigits({
 				// The `<input/>` value must start with the country calling code.
 				const prefix = getInternationalPhoneNumberPrefix(country, metadata)
 				if (phoneDigits.indexOf(prefix) !== 0) {
-					// // Reset phone digits if they don't start with the correct prefix.
-					// // Undo the `<input/>` value change if it doesn't.
-					if (countryMismatchDetected.current) {
-						// In case of a `country`/`value` mismatch,
-						// if it performed an "undo" here, then
-						// it wouldn't let a user edit their phone number at all,
-						// so this special case at least allows phone number editing
-						// when `value` already doesn't match the `country`.
+					// If a user tabs into a phone number input field
+					// that is `international` and `withCountryCallingCode`,
+					// and then starts inputting local phone number digits,
+					// the first digit would get "swallowed" if the fix below wasn't implemented.
+					// https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/43
+					if (phoneDigits && phoneDigits[0] !== '+') {
+						phoneDigits = prefix + phoneDigits
 					} else {
-						// If it simply did `phoneDigits = prefix` here,
-						// then it could have no effect when erasing phone number
-						// via Backspace, because `phoneDigits` in `state` wouldn't change
-						// as a result, because it was `prefix` and it became `prefix`,
-						// so the component wouldn't rerender, and the user would be able
-						// to erase the country calling code part, and that part is
-						// assumed to be non-eraseable. That's why the component is
-						// forcefully rerendered here.
-						setPhoneDigits(prefix)
-						setValueForPhoneDigits(undefined)
-						// Force a re-render of the `<input/>` with previous `phoneDigits` value.
-						return rerender()
+						// // Reset phone digits if they don't start with the correct prefix.
+						// // Undo the `<input/>` value change if it doesn't.
+						if (countryMismatchDetected.current) {
+							// In case of a `country`/`value` mismatch,
+							// if it performed an "undo" here, then
+							// it wouldn't let a user edit their phone number at all,
+							// so this special case at least allows phone number editing
+							// when `value` already doesn't match the `country`.
+						} else {
+							// If it simply did `phoneDigits = prefix` here,
+							// then it could have no effect when erasing phone number
+							// via Backspace, because `phoneDigits` in `state` wouldn't change
+							// as a result, because it was `prefix` and it became `prefix`,
+							// so the component wouldn't rerender, and the user would be able
+							// to erase the country calling code part, and that part is
+							// assumed to be non-eraseable. That's why the component is
+							// forcefully rerendered here.
+							setPhoneDigits(prefix)
+							setValueForPhoneDigits(undefined)
+							// Force a re-render of the `<input/>` with previous `phoneDigits` value.
+							return rerender()
+						}
 					}
 				}
 			} else {

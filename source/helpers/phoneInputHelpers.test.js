@@ -712,8 +712,8 @@ describe('phoneInputHelpers', () => {
 		})
 	})
 
-	it('should handle phone digits change (`international: true` and `countryCallingCodeEditable: false`) (reset incompatible input)', () => {
-		onPhoneDigitsChange('8', {
+	it('should handle phone digits change (`international: true` and `countryCallingCodeEditable: false`) (reset incompatible international input)', () => {
+		onPhoneDigitsChange('+1', {
 			prevPhoneDigits: '+78005553535',
 			country: 'RU',
 			international: true,
@@ -721,6 +721,20 @@ describe('phoneInputHelpers', () => {
 			metadata
 		}).should.deep.equal({
 			phoneDigits: '+7',
+			country: 'RU',
+			value: undefined
+		})
+	})
+
+	it('should handle phone digits change (`international: true` and `countryCallingCodeEditable: false`) (append national input)', () => {
+		onPhoneDigitsChange('8', {
+			prevPhoneDigits: '+78005553535',
+			country: 'RU',
+			international: true,
+			countryCallingCodeEditable: false,
+			metadata
+		}).should.deep.equal({
+			phoneDigits: '+78',
 			country: 'RU',
 			value: undefined
 		})

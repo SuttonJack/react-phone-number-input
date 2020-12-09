@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.8 / 09.12.2020
+==================
+
+* [Fixed](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/43) entering phone number digits in "force international" mode when the prefix is selected.
+
 3.1.6 / 16.11.2020
 ==================
 

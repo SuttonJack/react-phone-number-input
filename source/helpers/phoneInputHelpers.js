@@ -367,8 +367,18 @@ export function onPhoneDigitsChange(phoneDigits, {
 		const prefix = getInternationalPhoneNumberPrefix(country, metadata)
 		// The `<input/>` value must start with the country calling code.
 		if (phoneDigits.indexOf(prefix) !== 0) {
+			// If a user tabs into a phone number input field
+			// that is `international` and `withCountryCallingCode`,
+			// and then starts inputting local phone number digits,
+			// the first digit would get "swallowed" without this `appendDigits` fix.
+			// https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/43
+			if (phoneDigits && phoneDigits[0] !== '+') {
+				phoneDigits = prefix + phoneDigits
+			} else {
+				phoneDigits = prefix
+			}
 			return {
-				phoneDigits: prefix,
+				phoneDigits,
 				value: undefined,
 				country
 			}
