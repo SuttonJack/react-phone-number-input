@@ -519,10 +519,10 @@ export function getCountryFromPossiblyIncompleteInternationalPhoneNumber(number,
 	formatter.input(number)
 	// // `001` is a special "non-geograpical entity" code
 	// // in Google's `libphonenumber` library.
-	// if (formatter.country === '001') {
+	// if (formatter.getCountry() === '001') {
 	// 	return
 	// }
-	return formatter.country
+	return formatter.getCountry()
 }
 
 /**
