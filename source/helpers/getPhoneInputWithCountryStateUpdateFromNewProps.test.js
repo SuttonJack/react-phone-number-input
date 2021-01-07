@@ -179,6 +179,19 @@ describe('getPhoneInputWithCountryStateUpdateFromNewProps', () => {
 		})
 	})
 
+	// https://github.com/catamphetamine/react-phone-number-input/issues/377
+	it('should get state update from new props (`value` changed: undefined -> +78)', () => {
+		getPhoneInputWithCountryStateUpdateFromNewProps(
+			{ value: '+78' },
+			{},
+			{}
+		).should.deep.equal({
+			country: 'RU',
+			phoneDigits: '+78',
+			value: '+78'
+		})
+	})
+
 	it('should get state update from new props (`value` changed, but already displayed)', () => {
 		expect(getPhoneInputWithCountryStateUpdateFromNewProps(
 			{

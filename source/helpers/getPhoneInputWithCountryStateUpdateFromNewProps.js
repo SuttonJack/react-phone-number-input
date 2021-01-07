@@ -1,5 +1,6 @@
 import {
 	getInitialPhoneDigits,
+	getCountryForPartialE164Number,
 	parsePhoneNumber
 } from './phoneInputHelpers'
 
@@ -127,14 +128,23 @@ export default function getPhoneInputWithCountryStateUpdateFromNewProps(props, p
 	// If this `getDerivedStateFromProps()` call isn't ignored
 	// then the country flag would reset on each input.
 	if (newValue !== prevValue && newValue !== value) {
-		const phoneNumber = parsePhoneNumber(newValue, metadata)
+		let phoneNumber
 		let parsedCountry
-		if (phoneNumber) {
+		if (newValue) {
+			phoneNumber = parsePhoneNumber(newValue, metadata)
 			const supportedCountries = getSupportedCountries(countries, metadata)
-			// Ignore `else` because all countries are supported in metadata.
-			/* istanbul ignore next */
-			if (!supportedCountries || supportedCountries.indexOf(phoneNumber.country) >= 0) {
-				parsedCountry = phoneNumber.country
+			if (phoneNumber && phoneNumber.country) {
+				// Ignore `else` because all countries are supported in metadata.
+				/* istanbul ignore next */
+				if (!supportedCountries || supportedCountries.indexOf(phoneNumber.country) >= 0) {
+					parsedCountry = phoneNumber.country
+				}
+			} else {
+				parsedCountry = getCountryForPartialE164Number(newValue, {
+					country: undefined,
+					countries: supportedCountries,
+					metadata
+				})
 			}
 		}
 		let hasUserSelectedACountryUpdate
