@@ -458,6 +458,24 @@ If you think that the phone number parsing/formatting/validation engine malfunct
 
 Make sure to put a `<PhoneInput/>` into a `<form/>` otherwise web-browser's ["autocomplete"](https://www.w3schools.com/tags/att_input_autocomplete.asp) feature may not be working: a user will be selecting his phone number from the list but [nothing will be happening](https://gitlab.com/catamphetamine/react-phone-number-input/issues/101).
 
+## `react-hook-form`
+
+To use this component with [`react-hook-form`](https://react-hook-form.com), use one of the four exported components:
+
+```js
+// "Without country select" component.
+import PhoneInput from 'react-phone-number-input/react-hook-form-input'
+
+// "Without country select" component (to pass custom `metadata` property).
+import PhoneInput from 'react-phone-number-input/react-hook-form-input-core'
+
+// "With country select" component.
+import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form'
+
+// "With country select" component (to pass custom `metadata` property).
+import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form-core'
+```
+
 ## Customizing
 
 The `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry):

@@ -1,6 +1,11 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
-3.1.9 / 07.01.2020
+3.1.10 / 18.01.2021
+==================
+
+* Added `react-hook-form` components.
+
+3.1.9 / 07.01.2021
 ==================
 
 * [Fixed](https://github.com/catamphetamine/react-phone-number-input/issues/377) determining the `country` for a very incomplete `value` when `value` is set externally.
