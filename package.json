@@ -65,7 +65,7 @@
     "build-styles": "babel-node runnable/build-bundle-styles",
     "fix-locales": "babel-node runnable/fix-locales",
     "verify-flag-existence": "babel-node runnable/verify-flag-existence",
-    "prepublish": "npm-run-all fix-locales verify-flag-existence build test"
+    "prepublishOnly": "npm-run-all fix-locales verify-flag-existence build test"
   },
   "repository": {
     "type": "git",
