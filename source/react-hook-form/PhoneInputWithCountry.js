@@ -11,6 +11,7 @@ export function createPhoneInput(defaultMetadata) {
     return (
       <ReactHookFormInput
         {...props}
+        ref={ref}
         Component={PhoneInputWithCountry_}/>
     )
   }
