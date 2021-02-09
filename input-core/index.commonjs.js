@@ -10,4 +10,5 @@ exports.isPossiblePhoneNumber = require('../commonjs/libphonenumber/isPossiblePh
 
 exports.getCountries = require('libphonenumber-js/core').getCountries
 exports.getCountryCallingCode = require('libphonenumber-js/core').getCountryCallingCode
+exports.isSupportedCountry = require('libphonenumber-js/core').isSupportedCountry
 exports.parsePhoneNumber = require('libphonenumber-js/core').parsePhoneNumberFromString

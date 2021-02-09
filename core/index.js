@@ -6,5 +6,6 @@ export { default as isPossiblePhoneNumber } from '../modules/libphonenumber/isPo
 export {
 	getCountryCallingCode as getCountryCallingCode,
 	getCountries as getCountries,
+	isSupportedCountry as isSupportedCountry,
 	parsePhoneNumberFromString as parsePhoneNumber
 } from 'libphonenumber-js/core'

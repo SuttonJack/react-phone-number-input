@@ -320,6 +320,15 @@ import { getCountryCallingCode } from 'react-phone-number-input'
 getCountryCallingCode('US') === '1'
 ```
 
+### `isSupportedCountry(country: string): boolean`
+
+This is simply an alias for [`isSupportedCountry()`](https://gitlab.com/catamphetamine/libphonenumber-js#issupportedcountrycountry-string-boolean) from [`libphonenumber-js`](https://gitlab.com/catamphetamine/libphonenumber-js).
+
+```js
+import { isSupportedCountry } from 'react-phone-number-input'
+isSupportedCountry('US') === true
+```
+
 ## Flags URL
 
 By default, all flags are linked from [`country-flag-icons`](https://gitlab.com/catamphetamine/country-flag-icons)'s [GitHub pages](https://purecatamphetamine.github.io/country-flag-icons/3x2) website as `<img src="..."/>`s. Any other flag icons could be used instead by passing a custom [`flagUrl`](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry) property (which is `"https://purecatamphetamine.github.io/country-flag-icons/3x2/{XX}.svg"` by default) and specifying their aspect ratio via [`--PhoneInputCountryFlag-aspectRatio`](https://gitlab.com/catamphetamine/react-phone-number-input/blob/master/style.css) CSS variable (which is `1.5` by default, meaning "3x2" aspect ratio).

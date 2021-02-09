@@ -3,6 +3,7 @@ export { default as default } from '../modules/PhoneInput'
 export {
 	getCountries as getCountries,
 	getCountryCallingCode as getCountryCallingCode,
+	isSupportedCountry as isSupportedCountry,
 	parsePhoneNumberFromString as parsePhoneNumber
 } from 'libphonenumber-js/core'
 
