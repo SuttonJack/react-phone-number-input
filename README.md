@@ -68,7 +68,7 @@ The `value` argument of `onChange(value)` function will be the parsed phone numb
 
 All unknown properties will be passed through to the phone number `<input/>` component.
 
-To set a default country, pass a `defaultCountry` property. Example: `<PhoneInput defaultCountry="US" .../>`.
+To set a default country, pass a `defaultCountry` property (must be a supported [country code](#country-code)). Example: `<PhoneInput defaultCountry="US" .../>`.
 
 To get the currently selected country, pass an `onCountryChange(country)` property.
 
@@ -149,13 +149,13 @@ Doesn't require any CSS.
 
 Receives properties:
 
-* `country: string?` — If `country` is specified then the phone number can only be input in "national" (not "international") format, and will be parsed as a phone number belonging to the `country`. Example: `country="US"`.
+* `country: string?` — If `country` is specified then the phone number can only be input in "national" (not "international") format, and will be parsed as a phone number belonging to the `country`. Must be a supported [country code](#country-code). Example: `country="US"`.
 
 * `international: boolean?` — If `country` is specified and `international` property is `true` then the phone number can only be input in "international" format for that `country`. By default, the "country calling code" part (`+1` when `country` is `US`) is not included in the input field: that could be changed by passing `withCountryCallingCode` property (see below). So, if `country` is `US` and `international` property is not passed then the phone number can only be input in the "national" format for `US` (`(213) 373-4253`). But if `country` is `"US"` and `international` property is `true` then the phone number can only be input in the "international" format for `US` (`213 373 4253`) without the "country calling code" part (`+1`). This could be used for implementing phone number input components that show "country calling code" part before the input field and then the user can fill in the rest of their phone number digits in the input field.
 
 * `withCountryCallingCode: boolean?` — If `country` is specified and `international` property is `true` then the phone number can only be input in "international" format for that `country`. By default, the "country calling code" part (`+1` when `country` is `US`) is not included in the input field. To change that, pass `withCountryCallingCode` property, and it will include the "country calling code" part in the input field. See the demo for an example.
 
-* `defaultCountry: string?` — If `defaultCountry` is specified then the phone number can be input both in "international" format and "national" format. A phone number that's being input in "national" format will be parsed as a phone number belonging to the `defaultCountry`. Example: `defaultCountry="US"`.
+* `defaultCountry: string?` — If `defaultCountry` is specified then the phone number can be input both in "international" format and "national" format. A phone number that's being input in "national" format will be parsed as a phone number belonging to the `defaultCountry`. Must be a supported [country code](#country-code). Example: `defaultCountry="US"`.
 
 * If neither `country` nor `defaultCountry` are specified then the phone number can only be input in "international" format.
 
@@ -313,6 +313,8 @@ if (phoneNumber) {
 
 ### `getCountryCallingCode(country: string): string`
 
+Returns the ["country calling code"](https://gitlab.com/catamphetamine/libphonenumber-js#country-calling-code) of a `country`. The `country` argument must be a supported [country code](#country-code).
+
 This is simply an alias for [`getCountryCallingCode()`](https://gitlab.com/catamphetamine/libphonenumber-js#getcountrycallingcodecountry) from [`libphonenumber-js`](https://gitlab.com/catamphetamine/libphonenumber-js).
 
 ```js
@@ -321,6 +323,8 @@ getCountryCallingCode('US') === '1'
 ```
 
 ### `isSupportedCountry(country: string): boolean`
+
+Checks if a [country](#country-code) is supported by this library.
 
 This is simply an alias for [`isSupportedCountry()`](https://gitlab.com/catamphetamine/libphonenumber-js#issupportedcountrycountry-string-boolean) from [`libphonenumber-js`](https://gitlab.com/catamphetamine/libphonenumber-js).
 
@@ -606,6 +610,14 @@ Without country select:
 
 [React Responsive UI](https://catamphetamine.gitlab.io/react-responsive-ui/) component library.
 -->
+
+## Country code
+
+A "country code" is a [two-letter ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) (like `US`).
+
+This library supports all [officially assigned](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) ISO alpha-2 country codes, plus a few extra ones like: `AC` ([Ascension Island](https://en.wikipedia.org/wiki/Ascension_Island)), `TA` ([Tristan da Cunha](https://en.wikipedia.org/wiki/Tristan_da_Cunha)), `XK` ([Kosovo](https://en.wikipedia.org/wiki/Kosovo)).
+
+To check whether a country code is supported, use [`isSupportedCountry()`](#issupportedcountrycountry-string-boolean) function.
 
 ## GitHub
 
