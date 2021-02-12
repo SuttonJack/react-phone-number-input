@@ -10,7 +10,6 @@ let ReactHookFormInput = ({
   rules,
   onChange: onChange_,
   onBlur: onBlur_,
-  className,
   ...rest
 }, ref) => {
   const internalRef = useRef()
@@ -72,8 +71,7 @@ ReactHookFormInput.propTypes = {
   control: PropTypes.object.isRequired,
   rules: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  onBlur: PropTypes.func,
-  className: PropTypes.string
+  onBlur: PropTypes.func
 }
 
 export default ReactHookFormInput
