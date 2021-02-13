@@ -43,13 +43,19 @@ let ReactHookFormInput = ({
           if (onChange_) {
             onChange_(value)
           }
-        }, [])
+        }, [
+          onChange,
+          onChange_
+        ])
         const onBlurCombined = useCallback((event) => {
           onBlur(event)
           if (onBlur_) {
             onBlur_(event)
           }
-        }, [])
+        }, [
+          onBlur,
+          onBlur_
+        ])
         return (
           <Component
             ref={setRef}
