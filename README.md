@@ -277,27 +277,28 @@ formatPhoneNumberIntl('+12133734253') === '+1 213 373 4253'
 
 ### `isPossiblePhoneNumber(value: string): boolean`
 
-Checks if the phone number is "possible". Only checks the phone number length, doesn't check the number digits against any regular expressions like `isValidPhoneNumber()` does.
+Checks if a phone number `value` is a "possible" phone number. A phone number is "possible" when it has valid length. The actual phone number digits aren't validated.
 
 ```js
 import { isPossiblePhoneNumber } from 'react-phone-number-input'
-isPossiblePhoneNumber('+12133734253') === true
-isPossiblePhoneNumber('+19999999999') === true
+isPossiblePhoneNumber('+12223333333') === true
 ```
 
 ### `isValidPhoneNumber(value: string): boolean`
 
-Validates a phone number `value`.
+Checks if a phone number `value` is a "valid" phone number. A phone number is "valid" when it has valid length, and the actual phone number digits match the regular expressions for that country.
 
 ```js
 import { isValidPhoneNumber } from 'react-phone-number-input'
+isValidPhoneNumber('+12223333333') === false
 isValidPhoneNumber('+12133734253') === true
-isValidPhoneNumber('+19999999999') === false
 ```
 
 By default the component uses [`min` "metadata"](#min-vs-max-vs-mobile) which results in less strict validation compared to [`max`](#min-vs-max-vs-mobile) or [`mobile`](#min-vs-max-vs-mobile).
 
-I personally [don't use](https://gitlab.com/catamphetamine/libphonenumber-js#using-phone-number-validation-feature) strict phone number validation in my projects because telephone numbering plans sometimes change and so validation rules can change too which means that `isValidPhoneNumber()` function may become outdated if a website isn't re-deployed regularly. If it was required to validate a phone number being input by a user, then I'd personally use something like `isPossiblePhoneNumber()` that just validates phone number length.
+I personally don't use `isValidPhoneNumber()` for phone number validation in my projects. The rationale is that telephone numbering plans can and sometimes do change, meaning that `isValidPhoneNumber()`function may one day become outdated on a website that isn't actively maintained anymore. Imagine a "promo-site" or a "personal website" being deployed once and then running for years without any maintenance, where a client may be unable to submit a simple "Contact Us" form just because this newly allocated pool of mobile phone numbers wasn't present in that old version of `libphonenumber-js` bundled in it.
+
+Whenever there's a "business requirement" to validate a phone number that's being input by a user, I prefer using `isPossiblePhoneNumber()` instead of `isValidPhoneNumber()`, so that it just validates the phone number length, and doesn't validate the actual phone number digits. But it doesn't mean that you shouldn't use `isValidPhoneNumber()` — maybe in your case it would make sense.
 
 ### `parsePhoneNumber(input: string): PhoneNumber?`
 
