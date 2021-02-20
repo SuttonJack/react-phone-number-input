@@ -149,6 +149,18 @@ class PhoneNumberInput_ extends React.PureComponent {
 		}
 	}
 
+	setInputRef = (instance) => {
+		this.inputRef.current = instance
+		const { inputRef: ref } = this.props
+		if (ref) {
+			if (typeof ref === 'function') {
+				ref(instance)
+			} else {
+				ref.current = instance
+			}
+		}
+	}
+
 	// A shorthand for not passing `metadata` as a second argument.
 	isCountrySupportedWithError = (country) => {
 		const { metadata } = this.props
@@ -185,7 +197,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 		// Focus phone number `<input/>` upon country selection.
 		if (focusInputOnCountrySelection) {
-			this.getInputRef().current.focus()
+			this.inputRef.current.focus()
 		}
 
 		// If the user has already manually selected a country
@@ -323,11 +335,6 @@ class PhoneNumberInput_ extends React.PureComponent {
 		}
 	}
 
-	getInputRef() {
-		const { inputRef } = this.props
-		return inputRef || this.inputRef
-	}
-
 	// `state` holds previous props as `props`, and also:
 	// * `country` — The currently selected country, e.g. `"RU"`.
 	// * `value` — The currently entered phone number (E.164), e.g. `+78005553535`.
@@ -438,7 +445,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 				{/* Phone number `<input/>` */}
 				<InputComponent
-					ref={this.getInputRef()}
+					ref={this.setInputRef}
 					type="tel"
 					autoComplete={autoComplete}
 					{...numberInputProps}
