@@ -1,5 +1,10 @@
 'use strict'
 
-exports = module.exports = require('../commonjs/react-native/PhoneInput').default
+var metadata = require('libphonenumber-js/metadata.min.json')
+var createPhoneInput = require('../commonjs/react-native/PhoneInput').createPhoneInput
 
-exports['default'] = require('../commonjs/react-native/PhoneInput').default
+var PhoneInput = createPhoneInput(metadata)
+
+exports = module.exports = PhoneInput
+
+exports['default'] = PhoneInput

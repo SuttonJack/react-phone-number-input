@@ -1,1 +1,5 @@
-export { default as default } from '../modules/react-native/PhoneInput'
+import metadata from 'libphonenumber-js/metadata.min.json'
+
+import { createPhoneInput } from '../modules/react-native/PhoneInput'
+
+export default createPhoneInput(metadata)

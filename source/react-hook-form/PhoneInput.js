@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import ReactHookFormInput from './ReactHookFormInput'
 import PhoneInput_ from '../PhoneInput'
