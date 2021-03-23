@@ -17,19 +17,24 @@ import getInternationalPhoneNumberPrefix from './getInternationalPhoneNumberPref
  * @return {string?}
  */
 export function getPreSelectedCountry({
+	value,
 	phoneNumber,
 	defaultCountry,
 	countries,
 	required,
 	metadata
 }) {
-	let country = defaultCountry
+	let country
 
 	// If can get country from E.164 phone number
 	// then it overrides the `country` passed (or not passed).
 	if (phoneNumber && phoneNumber.country) {
 		// `country` will be left `undefined` in case of non-detection.
 		country = phoneNumber.country
+	} else if (defaultCountry) {
+		if (!value || couldNumberBelongToCountry(value, defaultCountry, metadata)) {
+			country = defaultCountry
+		}
 	}
 
 	// Only pre-select a country if it's in the available `countries` list.
@@ -43,6 +48,7 @@ export function getPreSelectedCountry({
 	// But still country `<select/>` can't be left in a broken state.
 	if (!country && required && countries && countries.length > 0) {
 		country = countries[0]
+		// noCountryMatchesTheNumber = true
 	}
 
 	return country

@@ -23,6 +23,7 @@ describe('phoneInputHelpers', () => {
 	it('should get pre-selected country', () => {
 		// Can't return "International". Return the first country available.
 		getPreSelectedCountry({
+			value: '+11111111111',
 			phoneNumber: {},
 			countries: ['US', 'RU'],
 			required: true,
@@ -31,15 +32,45 @@ describe('phoneInputHelpers', () => {
 
 		// Can return "International".
 		// Country can't be derived from the phone number.
+		// https://github.com/catamphetamine/react-phone-number-input/issues/378
 		expect(getPreSelectedCountry({
+			value: '+11111111111',
 			phoneNumber: {},
 			countries: ['US', 'RU'],
 			required: false,
 			metadata
 		})).to.be.undefined
 
+		// Can return "International".
+		// Country can't be derived from the phone number.
+		// Has `defaultCountry`.
+		// Has `value`.
+		// https://github.com/catamphetamine/react-phone-number-input/issues/378
+		expect(getPreSelectedCountry({
+			value: '+11111111111',
+			phoneNumber: {},
+			defaultCountry: 'RU',
+			countries: ['RU', 'FR'],
+			required: false,
+			metadata
+		})).to.be.undefined
+
+		// Can return "International".
+		// Country can be derived from the phone number.
+		// Has `defaultCountry`.
+		// Has a valid partial `value`.
+		// https://github.com/catamphetamine/react-phone-number-input/issues/378
+		expect(getPreSelectedCountry({
+			value: '+7800',
+			defaultCountry: 'RU',
+			countries: ['RU', 'FR'],
+			required: false,
+			metadata
+		})).to.equal('RU')
+
 		// Derive country from the phone number.
 		getPreSelectedCountry({
+			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			countries: ['US', 'RU'],
 			required: true,
@@ -48,6 +79,7 @@ describe('phoneInputHelpers', () => {
 
 		// Country derived from the phone number overrides the supplied one.
 		getPreSelectedCountry({
+			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			defaultCountry: 'US',
 			countries: ['US', 'RU'],
@@ -57,6 +89,7 @@ describe('phoneInputHelpers', () => {
 
 		// Only pre-select a country if it's in the available `countries` list.
 		getPreSelectedCountry({
+			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			countries: ['US', 'DE'],
 			required: true,
@@ -64,6 +97,7 @@ describe('phoneInputHelpers', () => {
 		}).should.equal('US')
 
 		expect(getPreSelectedCountry({
+			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			defaultCountry: 'US',
 			countries: ['US', 'DE'],

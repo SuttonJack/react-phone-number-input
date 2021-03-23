@@ -79,6 +79,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 			// The country selected.
 			country: getPreSelectedCountry({
+				value,
 				phoneNumber,
 				defaultCountry,
 				countries: countries || getCountries(metadata),

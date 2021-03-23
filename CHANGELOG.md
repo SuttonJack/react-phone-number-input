@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.18 / 23.03.2021
+==================
+
+* Fixed a [minor small bug](https://github.com/catamphetamine/react-phone-number-input/issues/378) when `defaultCountry` is selected as the country even when the initial `value` couldn't possibly belong to that country.
+
 3.1.10 / 18.01.2021
 ==================
 
