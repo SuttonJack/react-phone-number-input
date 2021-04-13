@@ -14,7 +14,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "country-flag-icons": "^1.0.2",
-    "input-format": "^0.3.5",
+    "input-format": "^0.3.6",
     "libphonenumber-js": "^1.9.14",
     "prop-types": "^15.7.2"
   },
