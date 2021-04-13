@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.19 / 13.04.2021
+==================
+
+* Added [`react-hook-form@7` support](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/57).
+
 3.1.18 / 23.03.2021
 ==================
 
