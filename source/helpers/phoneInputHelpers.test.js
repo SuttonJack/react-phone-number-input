@@ -26,6 +26,7 @@ describe('phoneInputHelpers', () => {
 			value: '+11111111111',
 			phoneNumber: {},
 			countries: ['US', 'RU'],
+			getAnyCountry: () => 'US',
 			required: true,
 			metadata
 		}).should.equal('US')
@@ -37,6 +38,7 @@ describe('phoneInputHelpers', () => {
 			value: '+11111111111',
 			phoneNumber: {},
 			countries: ['US', 'RU'],
+			getAnyCountry: () => 'US',
 			required: false,
 			metadata
 		})).to.be.undefined
@@ -73,6 +75,7 @@ describe('phoneInputHelpers', () => {
 			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			countries: ['US', 'RU'],
+			getAnyCountry: () => 'US',
 			required: true,
 			metadata
 		}).should.equal('RU')
@@ -92,6 +95,7 @@ describe('phoneInputHelpers', () => {
 			value: '+78005553535',
 			phoneNumber: { country: 'RU', phone: '8005553535' },
 			countries: ['US', 'DE'],
+			getAnyCountry: () => 'US',
 			required: true,
 			metadata
 		}).should.equal('US')
@@ -547,6 +551,16 @@ describe('phoneInputHelpers', () => {
 		}).should.deep.equal({
 			phoneDigits: '+',
 			country: undefined,
+			value: undefined
+		})
+
+		onPhoneDigitsChange('+', {
+			metadata,
+			countryRequired: true,
+			getAnyCountry: () => 'US'
+		}).should.deep.equal({
+			phoneDigits: '+',
+			country: 'US',
 			value: undefined
 		})
 

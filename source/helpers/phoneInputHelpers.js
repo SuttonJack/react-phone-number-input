@@ -20,6 +20,7 @@ export function getPreSelectedCountry({
 	value,
 	phoneNumber,
 	defaultCountry,
+	getAnyCountry,
 	countries,
 	required,
 	metadata
@@ -47,7 +48,7 @@ export function getPreSelectedCountry({
 	// It will still be the wrong country though.
 	// But still country `<select/>` can't be left in a broken state.
 	if (!country && required && countries && countries.length > 0) {
-		country = countries[0]
+		country = getAnyCountry()
 		// noCountryMatchesTheNumber = true
 	}
 
@@ -353,6 +354,8 @@ export function getCountryForPartialE164Number(partialE164Number, {
  * @param  {string?} phoneDigits — Parsed `<input/>` value. Examples: `""`, `"+"`, `"+123"`, `"123"`.
  * @param  {string?} prevPhoneDigits — Previous parsed `<input/>` value. Examples: `""`, `"+"`, `"+123"`, `"123"`.
  * @param  {string?} country - Currently selected country.
+ * @param  {boolean} countryRequired - Is selecting some country required.
+ * @param  {function} getAnyCountry - Can be used to get any country when selecting some country required.
  * @param  {string[]?} countries - A list of available countries. If not passed then "all countries" are assumed.
  * @param  {boolean} international - Set to `true` to force international phone number format (leading `+`). Set to `false` to force "national" phone number format. Is `undefined` by default.
  * @param  {boolean} limitMaxLength — Whether to enable limiting phone number max length.
@@ -363,6 +366,8 @@ export function onPhoneDigitsChange(phoneDigits, {
 	prevPhoneDigits,
 	country,
 	defaultCountry,
+	countryRequired,
+	getAnyCountry,
 	countries,
 	international,
 	limitMaxLength,
@@ -482,6 +487,10 @@ export function onPhoneDigitsChange(phoneDigits, {
 			// Re-calculate `value` because `phoneDigits` has changed.
 			value = e164(phoneDigits, country, metadata)
 		}
+	}
+
+	if (!country && countryRequired) {
+		country = defaultCountry || getAnyCountry()
 	}
 
 	return {

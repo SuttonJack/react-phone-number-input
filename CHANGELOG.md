@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.20 / 26.04.2021
+==================
+
+* [Fixed](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/38) `addInternationalOption={false}` React warning.
+
 3.1.19 / 13.04.2021
 ==================
 
