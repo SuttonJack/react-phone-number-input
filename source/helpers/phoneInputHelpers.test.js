@@ -784,7 +784,7 @@ describe('phoneInputHelpers', () => {
 		}).should.deep.equal({
 			phoneDigits: '+78',
 			country: 'RU',
-			value: undefined
+			value: '+78'
 		})
 	})
 
