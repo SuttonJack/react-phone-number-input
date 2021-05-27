@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.23 / 27.05.2021
+==================
+
+* [Fixed](https://github.com/catamphetamine/react-phone-number-input/issues/296#issuecomment-849248267) React Native `{...rest}` props passthrough.
+
 3.1.20 / 26.04.2021
 ==================
 
