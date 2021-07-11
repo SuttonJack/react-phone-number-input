@@ -31,7 +31,7 @@ let ReactHookFormInput = ({
   // https://github.com/react-hook-form/react-hook-form/issues/2990
   defaultValue = defaultValue === undefined ? null : defaultValue
   const renderInputComponent = ({
-    ref,
+    // ref,
     onChange,
     onBlur,
     // `restReactHookFormControlledFieldProps` contain properties like `name` and `value`.
@@ -40,13 +40,19 @@ let ReactHookFormInput = ({
   }) => {
     const setComponentRef = useCallback((instance) => {
       setRef(instance)
-      if (ref) {
-        if (typeof ref === 'function') {
-          ref(instance)
-        } else {
-          ref.current = instance
-        }
-      }
+      // Setting `ref` passed by `react-hook-form` results in a bug:
+      // when an initial value is defined (example: "+78005553535")
+      // it seems to be set directly on the `ref`d `<input/>`
+      // by `react-hook-form` and the result is a non-formatted
+      // "+78005553535" initial value in the `<input/>`.
+      //
+      // if (ref) {
+      //   if (typeof ref === 'function') {
+      //     ref(instance)
+      //   } else {
+      //     ref.current = instance
+      //   }
+      // }
     }, [ref, setRef])
     const onChangeCombined = useCallback((value) => {
       onChange(value)
@@ -101,7 +107,7 @@ ReactHookFormInput.propTypes = {
   name: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
   control: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.object,
   onChange: PropTypes.func,
   onBlur: PropTypes.func
 }

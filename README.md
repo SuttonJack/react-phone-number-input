@@ -492,6 +492,37 @@ import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form'
 import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form-core'
 ```
 
+[Example](https://codesandbox.io/s/recursing-brook-kmtjw):
+
+```js
+// "Without country select" component.
+import PhoneInput from "react-phone-number-input/react-hook-form-input"
+
+// "With country select" component.
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
+
+import { useForm } from "react-hook-form"
+
+export default function Form() {
+  const { control, handleSubmit } = useForm()
+  return (
+    <form onSubmit={handleSubmit(...)}>
+      <PhoneInput
+        name="phoneInput"
+        control={control} />
+
+      <PhoneInputWithCountry
+        name="phoneInputWithCountrySelect"
+        control={control} />
+
+      <button type="submit">
+        Submit
+      </button>
+    </form>
+  )
+}
+```
+
 ## Customizing
 
 The `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry):
