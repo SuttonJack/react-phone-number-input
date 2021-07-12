@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useImperativeHandle } from 'react'
 import { Controller } from 'react-hook-form'
 import PropTypes from 'prop-types'
 
@@ -24,29 +24,37 @@ let ReactHookFormInput = ({
       }
     }
   }, [ref])
-  const onFocus = useCallback(() => {
-    // internalRef.current.disabled = false
-    internalRef.current.focus()
-  }, [])
   // `feact-hook-form` doesn't know how to properly handle `undefined` values.
   // https://github.com/react-hook-form/react-hook-form/issues/2990
   defaultValue = defaultValue === undefined ? null : defaultValue
   const renderInputComponent = ({
-    // ref,
+    ref,
     onChange,
     onBlur,
     // `restReactHookFormControlledFieldProps` contain properties like `name` and `value`.
     // https://github.com/react-hook-form/react-hook-form/blob/b0e6c3057ac12a7b12d5616aecf3791acb7d7204/src/types/controller.ts#L21-L30
     ...restReactHookFormControlledFieldProps
   }) => {
+    // Setting `ref` passed by `react-hook-form` results in a bug:
+    // when an initial value is defined (example: "+78005553535")
+    // it seems to be set directly on the `ref`d `<input/>`
+    // by `react-hook-form` and the result is a non-formatted
+    // "+78005553535" initial value in the `<input/>`.
+    //
+    // To work around that bug, a fake `ref` is assigned,
+    // so that it could only `.focus()` it and no more.
+    //
+    // `useImperativeHandle()` hook seems to allow `ref` being `undefined`.
+    //
+    // if (ref) {
+      useImperativeHandle(ref, () => ({
+        focus() {
+          internalRef.current.focus()
+        }
+      }))
+    // }
     const setComponentRef = useCallback((instance) => {
       setRef(instance)
-      // Setting `ref` passed by `react-hook-form` results in a bug:
-      // when an initial value is defined (example: "+78005553535")
-      // it seems to be set directly on the `ref`d `<input/>`
-      // by `react-hook-form` and the result is a non-formatted
-      // "+78005553535" initial value in the `<input/>`.
-      //
       // if (ref) {
       //   if (typeof ref === 'function') {
       //     ref(instance)
@@ -82,6 +90,13 @@ let ReactHookFormInput = ({
         onBlur={onBlurCombined}/>
     )
   }
+  // `react-hook-form@7` no longer accepts `onFocus` property.
+  // Since this component can be used with both `v6` and `v7`,
+  // the `onFocus` property is left here.
+  const onFocus = useCallback(() => {
+    // internalRef.current.disabled = false
+    internalRef.current.focus()
+  }, [])
   return (
     <Controller
       control={control}

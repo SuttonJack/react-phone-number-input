@@ -531,7 +531,7 @@ Both components accept properties:
 
 * `control` — (required) The `control` object returned from `useForm()`.
 
-* `rules` — (optional) Validation rules in the same format as for `register()`. Example: `{{ required: true, validate: isValidPhoneNumber }}`.
+* `rules` — (optional) Validation rules in the same format as for `register()`. Example: `{{ required: true, validate: isPossiblePhoneNumber }}`.
 
 * `defaultValue` — (optional) A default value could be passed directly to the component, or as part of the `defaultValues` parameter of `useForm()`.
 
