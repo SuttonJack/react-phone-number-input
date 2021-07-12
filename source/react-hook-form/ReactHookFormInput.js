@@ -6,6 +6,7 @@ let ReactHookFormInput = ({
   Component,
   name,
   defaultValue,
+  shouldUnregister,
   control,
   rules,
   onChange: onChange_,
@@ -86,6 +87,7 @@ let ReactHookFormInput = ({
       control={control}
       name={name}
       defaultValue={defaultValue}
+      shouldUnregister={shouldUnregister}
       rules={rules}
       onFocus={onFocus}
       render={(props) => {
@@ -106,6 +108,9 @@ ReactHookFormInput.propTypes = {
   Component: PropTypes.elementType.isRequired,
   name: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
+  // Without `shouldUnregister: true`, an input value would be retained when input is removed.
+  // Setting `shouldUnregister: true` makes the form behave more closer to native.
+  shouldUnregister: PropTypes.bool,
   control: PropTypes.object.isRequired,
   rules: PropTypes.object,
   onChange: PropTypes.func,

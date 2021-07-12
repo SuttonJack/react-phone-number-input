@@ -509,11 +509,13 @@ export default function Form() {
     <form onSubmit={handleSubmit(...)}>
       <PhoneInput
         name="phoneInput"
-        control={control} />
+        control={control}
+        rules={{ required: true }} />
 
       <PhoneInputWithCountry
         name="phoneInputWithCountrySelect"
-        control={control} />
+        control={control}
+        rules={{ required: true }} />
 
       <button type="submit">
         Submit
@@ -522,6 +524,18 @@ export default function Form() {
   )
 }
 ```
+
+Both components accept properties:
+
+* `name` — (required) Form field name.
+
+* `control` — (required) The `control` object returned from `useForm()`.
+
+* `rules` — (optional) Validation rules in the same format as for `register()`. Example: `{{ required: true, validate: isValidPhoneNumber }}`.
+
+* `defaultValue` — (optional) A default value could be passed directly to the component, or as part of the `defaultValues` parameter of `useForm()`.
+
+<!-- * `shouldUnregister` — (optional) (advanced) Same as `shouldUnregister` parameter of `register()` (see `react-hook-form` docs for more info). Pass `true` to clear the value from form values on input component unmount: for example, when showing or hiding phone input field. `shouldUnregister` can also be set globally for all fields when passed as a parameter to `useForm()`. -->
 
 ## Customizing
 
