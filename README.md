@@ -184,7 +184,7 @@ This library also exports `getCountries()` and `getCountryCallingCode(country)` 
 
 ```js
 import PropTypes from 'prop-types'
-import { getCountries, getCountryCallingCode } from 'react-phone-number-input/input'
+import { getCountries, getCountryCallingCode } from 'react-phone-number-input'
 
 const CountrySelect = ({ value, onChange, labels, ...rest }) => (
   <select
