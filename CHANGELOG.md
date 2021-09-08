@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.28 / 08.09.2021
+==================
+
+* Fixed a [small bug](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/82) in a "without country select" input: when setting a `country` that doesn't correspond to the current `value` property it now changes the `value` property accordingly.
+
 3.1.23 / 27.05.2021
 ==================
 
