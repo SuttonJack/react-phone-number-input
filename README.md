@@ -431,7 +431,7 @@ The `labels` format is:
 An example of using translated `labels`:
 
 ```js
-import ru from 'react-phone-number-input/locale/ru'
+import ru from 'react-phone-number-input/locale/ru.json'
 
 <PhoneInput ... labels={ru}/>
 ```
