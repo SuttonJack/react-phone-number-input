@@ -9,6 +9,7 @@ import { TextInput } from 'react-native'
 function PhoneTextInput({
   autoComplete,
   onChange,
+  inputComponent: Input,
   ...rest
 }, ref) {
   // Instead of `onChangeText` it could use `onChange` and get `value` from `nativeEvent.text`.
@@ -24,7 +25,7 @@ function PhoneTextInput({
   // * `value: string?`
   // plus the ones mentioned below:
   return (
-    <TextInput
+    <Input
       ref={ref}
       keyboardType="phone-pad"
       autoCompleteType={autoComplete}
@@ -38,7 +39,12 @@ PhoneTextInput = React.forwardRef(PhoneTextInput)
 PhoneTextInput.propTypes = {
   autoComplete: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  inputComponent: PropTypes.elementType.isRequired,
+}
+
+PhoneTextInput.defaultProps = {
+  inputComponent: TextInput
 }
 
 export default PhoneTextInput
