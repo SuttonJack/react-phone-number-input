@@ -40,7 +40,7 @@ PhoneTextInput.propTypes = {
   autoComplete: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  inputComponent: PropTypes.elementType.isRequired,
+  inputComponent: PropTypes.elementType.isRequired
 }
 
 PhoneTextInput.defaultProps = {
