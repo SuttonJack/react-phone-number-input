@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.31 / 03.10.2021
+==================
+
+* Added `inputComponent` property on a React Native "without country select" component.
+
 3.1.28 / 08.09.2021
 ==================
 
