@@ -510,7 +510,9 @@ PhoneNumberInput.propTypes = {
 	value: PropTypes.string,
 
 	/**
-	 * Updates the `value` as the user inputs the phone number.
+	 * A function of `value: string?`.
+	 *
+	 * Updates the `value` property as the user inputs a phone number.
 	 */
 	onChange: PropTypes.func.isRequired,
 

@@ -14,6 +14,7 @@ let ReactHookFormInput = ({
   ...rest
 }, ref) => {
   const internalRef = useRef()
+
   const setRef = useCallback((instance) => {
     internalRef.current = instance
     if (ref) {
@@ -24,9 +25,11 @@ let ReactHookFormInput = ({
       }
     }
   }, [ref])
+
   // `feact-hook-form` doesn't know how to properly handle `undefined` values.
   // https://github.com/react-hook-form/react-hook-form/issues/2990
   defaultValue = defaultValue === undefined ? null : defaultValue
+
   const renderInputComponent = ({
     ref,
     onChange,
@@ -53,6 +56,7 @@ let ReactHookFormInput = ({
         }
       }))
     // }
+
     const setComponentRef = useCallback((instance) => {
       setRef(instance)
       // if (ref) {
@@ -63,6 +67,7 @@ let ReactHookFormInput = ({
       //   }
       // }
     }, [ref, setRef])
+
     const onChangeCombined = useCallback((value) => {
       onChange(value)
       if (onChange_) {
@@ -72,6 +77,7 @@ let ReactHookFormInput = ({
       onChange,
       onChange_
     ])
+
     const onBlurCombined = useCallback((event) => {
       onBlur(event)
       if (onBlur_) {
@@ -81,6 +87,7 @@ let ReactHookFormInput = ({
       onBlur,
       onBlur_
     ])
+
     return (
       <Component
         {...rest}
@@ -90,6 +97,7 @@ let ReactHookFormInput = ({
         onBlur={onBlurCombined}/>
     )
   }
+
   // `react-hook-form@7` no longer accepts `onFocus` property.
   // Since this component can be used with both `v6` and `v7`,
   // the `onFocus` property is left here.
@@ -97,6 +105,7 @@ let ReactHookFormInput = ({
     // internalRef.current.disabled = false
     internalRef.current.focus()
   }, [])
+
   return (
     <Controller
       control={control}

@@ -1,4 +1,4 @@
-var Input = require('../commonjs/PhoneInput').default
+var Input = require('../commonjs/PhoneInputBrowser').default
 
 exports = module.exports = Input
 exports['default']       = Input

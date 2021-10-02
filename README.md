@@ -165,7 +165,7 @@ Receives properties:
 
 * `onChange(value: string?)` — Updates the `value`.
 
-* `inputComponent: component?` — A custom `<input/>` component can be passed. In that case, it must be a `React.forwardRef()` to the actual `<input/>`.
+* `inputComponent: component?` — A custom `<input/>` component can be passed. In that case, it must do `React.forwardRef()` to the actual `<input/>` DOM element. Receives properties: `value: string`, `onChange(event: Event)`, and all the "rest" of the properties that're not handled by this library, like `type="tel"`, `autoComplete="tel"`, etc. Is a generic DOM `<input/>` by default.
 
 * `smartCaret: boolean?` — By default, the `<input/>` uses "smart" caret positioning. To turn that behavior off one can pass `smartCaret={false}` property.
 
@@ -237,7 +237,7 @@ function Example() {
 
 ## React Native
 
-This library is shipped with an _experimental_ React Native component. See the [feedback thread](https://github.com/catamphetamine/react-phone-number-input/issues/296).
+This library also includes a React Native version of a "without country select" component. Post bug reports and suggestions in the [feedback thread](https://github.com/catamphetamine/react-phone-number-input/issues/296).
 
 ```js
 import React, { useState } from 'react'
@@ -254,6 +254,12 @@ function Example() {
   )
 }
 ```
+
+Accepts the same properties as the web version of "without country select" component, with the following differences:
+
+* `smartCaret: boolean?` property is not accepted because "smart caret" positioning feature is not implemented in the React Native component.
+
+* `inputComponent: component?` — A custom input field component can be passed. In that case, it must do `React.forwardRef()` to the actual input field. Receives properties: `value: string`, `onChangeText(value: string)`, and all the "rest" of the properties that're not handled by this library, like `keyboardType="phone-pad"`, `autoCompleteType="tel"`, etc. Is a generic `<TextInput/>` by default.
 
 ## Utility
 

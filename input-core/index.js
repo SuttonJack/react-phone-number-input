@@ -1,4 +1,4 @@
-export { default as default } from '../modules/PhoneInput'
+export { default as default } from '../modules/PhoneInputBrowser'
 
 export {
 	isValidPhoneNumber,
