@@ -1,5 +1,12 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.32 / 07.10.2021
+==================
+
+* Added TypeScript "typings".
+
+* The `/core` "with country select" component now doesn't require a `countrySelectComponent` property because it now has a default value.
+
 3.1.31 / 03.10.2021
 ==================
 
