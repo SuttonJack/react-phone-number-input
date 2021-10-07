@@ -5,6 +5,8 @@ import classNames from 'classnames'
 import InputSmart from './InputSmart'
 import InputBasic from './InputBasic'
 
+import { CountrySelectWithIcon as CountrySelect } from './CountrySelect'
+
 import Flag from './Flag'
 import InternationalIcon from './InternationalIcon'
 
@@ -529,12 +531,6 @@ PhoneNumberInput.propTypes = {
 	onBlur: PropTypes.func,
 
 	/**
-	 * `onKeyDown` handler (e.g. to handle Enter key press).
-	 * @ignore
-	 */
-	onKeyDown: PropTypes.func,
-
-	/**
 	 * Set to `true` to disable both the phone number `<input/>`
 	 * and the country `<select/>`.
 	 */
@@ -861,6 +857,11 @@ PhoneNumberInput.defaultProps = {
 	 * Remember (and autofill) the value as a phone number.
 	 */
 	autoComplete: 'tel',
+
+	/**
+	 * Country `<select/>` component.
+	 */
+	countrySelectComponent: CountrySelect,
 
 	/**
 	 * Flag icon component.

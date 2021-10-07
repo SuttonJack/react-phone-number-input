@@ -545,11 +545,9 @@ Both components accept properties:
 
 ## Customizing
 
-The `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry):
+"With country select" `<PhoneInput/>` component accepts some [customization properties](http://catamphetamine.gitlab.io/react-phone-number-input/docs#phoneinputwithcountry):
 
 * `inputComponent` — Custom phone number `<input/>` component.
-
-* `countrySelectComponent` — Custom country `<select/>` component.
 
 <!-- * `containerComponent` — Custom wrapping `<div/>` component. -->
 
@@ -561,9 +559,19 @@ The `<PhoneInput/>` component accepts some [customization properties](http://cat
 
 * `flagComponent` — Custom flag icon component.
 
+* `countrySelectComponent` — Custom country `<select/>` component.
+
 * `countrySelectProps.arrowComponent` — Custom arrow component of the default country `<select/>`.
 
-All these customization properties have their default values: `min` metadata, English labels, default country `<select/>` component. If some of those default values are not used, and the developer wants to reduce the bundle size a tiny bit, then they can use the `/core` export instead of the default export to import a `<PhoneInput/>` component that doesn't include any of the aforementioned default properties.
+### `react-phone-number-input/core`
+
+"With country select" component imported from `react-phone-number-input/core` subpackage doesn't have default values for the following properties:
+
+* `metadata`
+
+* `labels`
+
+It could be used by developers who'd like to provide their own custom-generated metadata that supports a smaller set of countries.
 
 #### `countrySelectComponent`
 
