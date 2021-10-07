@@ -132,6 +132,7 @@ ReactHookFormInput.propTypes = {
   Component: PropTypes.elementType.isRequired,
   name: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
+  // A quote from `react-hook-form`:
   // Without `shouldUnregister: true`, an input value would be retained when input is removed.
   // Setting `shouldUnregister: true` makes the form behave more closer to native.
   shouldUnregister: PropTypes.bool,

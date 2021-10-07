@@ -681,6 +681,10 @@ This library supports all [officially assigned](https://en.wikipedia.org/wiki/IS
 
 To check whether a country code is supported, use [`isSupportedCountry()`](#issupportedcountrycountry-string-boolean) function.
 
+## TypeScript
+
+This library comes with TypeScript "typings". If you happen to find any bugs in those, create an issue.
+
 ## GitHub
 
 On March 9th, 2020, GitHub, Inc. silently [banned](https://medium.com/@catamphetamine/how-github-blocked-me-and-all-my-libraries-c32c61f061d3) my account (erasing all my repos, issues and comments) without any notice or explanation. Because of that, all source codes had to be promptly moved to [GitLab](https://gitlab.com/catamphetamine/react-phone-number-input). GitHub repo is now deprecated, and the latest source codes can be found on GitLab, which is also the place to report any issues.
