@@ -11,20 +11,23 @@ import {
   Props as BaseProps
 } from '../index.d';
 
-export interface ReactHookFormComponentProps<InputElement> {
+export interface ReactHookFormComponentProps {
   name: string;
   defaultValue?: Value;
   control: Control;
   rules?: object;
-  onChange?(event: React.ChangeEvent<InputElement>): void;
-  onBlur?(event: React.FocusEvent<InputElement>): void;
   // A quote from `react-hook-form`:
   // Without `shouldUnregister: true`, an input value would be retained when input is removed.
   // Setting `shouldUnregister: true` makes the form behave more closer to native.
   shouldUnregister?: boolean;
 }
 
-export interface Props extends BaseProps, ReactHookFormComponentProps<HTMLInputElement> {
+interface ReactHookFormComponentPropsOnChangeValue extends ReactHookFormComponentProps {
+  onChange?(value?: Value): void;
+  onBlur?(event: React.FocusEvent<HTMLElement>): void;
+}
+
+export interface Props extends BaseProps, ReactHookFormComponentPropsOnChangeValue {
 }
 
 type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State<Props>>

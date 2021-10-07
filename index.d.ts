@@ -47,7 +47,8 @@ export type Labels = {
 	ZZ: string;
 }
 
-// `Props` are imported in `/react-hook-form/index.d.ts`.
+// `Props` are imported in `/react-hook-form/index.d.ts`
+// and in `/core/index.d.ts`.
 export interface Props {
 	value?: Value;
 	onChange(value?: Value): void;

@@ -3,12 +3,6 @@
 
 import * as React from 'react';
 
-import { Control } from 'react-hook-form';
-
-import {
-	Value
-} from '../index.d';
-
 import {
   ReactHookFormComponentProps
 } from '../react-hook-form/index.d';
@@ -17,7 +11,12 @@ import {
   Props as BaseProps
 } from '../input/index.d';
 
-export interface Props extends BaseProps, ReactHookFormComponentProps<HTMLElement> {
+interface ReactHookFormComponentPropsOnChangeEvent extends ReactHookFormComponentProps {
+  onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
+  onBlur?(event: React.FocusEvent<HTMLInputElement>): void;
+}
+
+export interface Props extends BaseProps, ReactHookFormComponentPropsOnChangeEvent {
 }
 
 type PhoneInputType = (props: Props) => JSX.Element;
