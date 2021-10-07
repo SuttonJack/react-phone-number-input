@@ -8,14 +8,14 @@ import {
 } from '../index.d';
 
 import {
-	Props
+	Props as BaseProps
 } from '../input/index.d';
 
-interface PropsWithMetadata extends Props {
+interface Props extends BaseProps {
 	metadata: Metadata;
 }
 
-type PhoneInputComponentType = (props: PropsWithMetadata) => JSX.Element;
+type PhoneInputComponentType = (props: Props) => JSX.Element;
 
 declare const PhoneInput: PhoneInputComponentType;
 

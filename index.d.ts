@@ -38,7 +38,8 @@ interface FlagProps {
 
 type Flag = (props: FlagProps) => JSX.Element;
 
-type Labels = {
+// `Labels` are imported in `/core/index.d.ts`.
+export type Labels = {
 	ext: string;
 	country: string;
 	phone: string;
@@ -82,11 +83,9 @@ export interface Props {
 	[otherProperty: string]: any;
 }
 
-export interface PropsWithMetadata extends Props {
-	metadata: Metadata;
-}
-
-interface StateWithoutProps {
+// `State` is imported in `/core/index.d.ts`
+// and in `/react-hook-form/index.d.ts`.
+export interface State<Props> {
 	country?: Country;
 	countries?: Country[];
 	hasUserSelectedACountry?: boolean;
@@ -102,22 +101,12 @@ interface StateWithoutProps {
 	// in order to force a rerender of the component.
 	forceRerender?: object;
 	isFocused?: boolean;
-}
-
-// `State` is imported in `/react-hook-form/index.d.ts`.
-export interface State extends StateWithoutProps {
 	// `props` are stored in state in order to be able to compare
 	// new `props` with the "previous" ones in `state.props`.
 	props: Props;
 }
 
-export interface StateWithMetadata extends StateWithoutProps {
-	// `props` are stored in state in order to be able to compare
-	// new `props` with the "previous" ones in `state.props`.
-	props: PropsWithMetadata;
-}
-
-type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State>
+type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State<Props>>
 
 declare const PhoneInputWithCountrySelect: PhoneInputWithCountrySelectType;
 

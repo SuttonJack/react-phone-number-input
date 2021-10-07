@@ -27,7 +27,7 @@ export interface ReactHookFormComponentProps<InputElement> {
 export interface Props extends BaseProps, ReactHookFormComponentProps<HTMLInputElement> {
 }
 
-type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State>
+type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State<Props>>
 
 declare const PhoneInputWithCountrySelect: PhoneInputWithCountrySelectType;
 

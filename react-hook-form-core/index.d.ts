@@ -4,18 +4,20 @@
 import * as React from 'react';
 
 import {
-  Metadata
+  Metadata,
+  Labels
 } from '../index.d';
 
 import {
-	Props
+	Props as BaseProps
 } from '../react-hook-form/index.d';
 
-interface PropsWithMetadata extends Props {
+interface Props extends BaseProps {
   metadata: Metadata;
+  labels: Labels;
 }
 
-type PhoneInputWithCountrySelectComponentType = (props: PropsWithMetadata) => JSX.Element;
+type PhoneInputWithCountrySelectComponentType = (props: Props) => JSX.Element;
 
 declare const PhoneInputWithCountrySelect: PhoneInputWithCountrySelectComponentType;
 
