@@ -1,5 +1,4 @@
-import {
-	parsePhoneNumberFromString,
+import parsePhoneNumber_, {
 	getCountryCallingCode,
 	AsYouType,
 	Metadata
@@ -110,7 +109,7 @@ export function getCountrySelectOptions({
  * parsePhoneNumber('+78005553535')
  */
 export function parsePhoneNumber(value, metadata) {
-	return parsePhoneNumberFromString(value || '', metadata)
+	return parsePhoneNumber_(value || '', metadata)
 }
 
 /**

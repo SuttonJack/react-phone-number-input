@@ -42,3 +42,14 @@ type PhoneInputComponentType = (props: Props) => JSX.Element;
 declare const PhoneInput: PhoneInputComponentType;
 
 export default PhoneInput;
+
+export {
+	parsePhoneNumber,
+	formatPhoneNumber,
+	formatPhoneNumberIntl,
+	isValidPhoneNumber,
+	isPossiblePhoneNumber,
+	getCountryCallingCode,
+	getCountries,
+	isSupportedCountry
+} from '../index.d';

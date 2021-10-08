@@ -310,7 +310,7 @@ Whenever there's a "business requirement" to validate a phone number that's bein
 
 ### `parsePhoneNumber(input: string): PhoneNumber?`
 
-Parses a [`PhoneNumber`](https://gitlab.com/catamphetamine/libphonenumber-js#phonenumber) object from a `string`. This is simply an alias for [`parsePhoneNumberFromString()`](https://gitlab.com/catamphetamine/libphonenumber-js#parsephonenumberfromstringstring-defaultcountry) from [`libphonenumber-js`](https://gitlab.com/catamphetamine/libphonenumber-js). Can be used to get `country` from `value`.
+Parses a [`PhoneNumber`](https://gitlab.com/catamphetamine/libphonenumber-js#phonenumber) object from a `string`. This is simply an alias for [`parsePhoneNumber()`](https://gitlab.com/catamphetamine/libphonenumber-js#parsephonenumberstring-options-or-defaultcountry-phonenumber) from [`libphonenumber-js`](https://gitlab.com/catamphetamine/libphonenumber-js). Can be used to get `country` from `value`.
 
 ```js
 import { parsePhoneNumber } from 'react-phone-number-input'
