@@ -1,5 +1,10 @@
 <!-- Maybe change the link to the flags to this repo's `unpkg.com` or something like that.  -->
 
+3.1.37 / 03.11.2021
+==================
+
+* [Fixed](https://gitlab.com/catamphetamine/react-phone-number-input/-/issues/91) TypeScript "typings".
+
 3.1.36 / 02.11.2021
 ==================
 
