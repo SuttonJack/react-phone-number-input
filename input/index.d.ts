@@ -24,7 +24,7 @@ export interface PropsWithoutSmartCaret<InputComponent> {
 	withCountryCallingCode?: boolean;
 	defaultCountry?: Country;
 	value?: Value;
-	onChange(value: Value?): void;
+	onChange(value?: Value): void;
 	inputComponent?: InputComponent;
 	useNationalFormatForDefaultCountryValue?: boolean;
 	// All other properties are passed through to the `<input/>` element.
