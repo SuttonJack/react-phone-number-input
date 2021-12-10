@@ -57,16 +57,19 @@ export type Labels = Partial<Record<Country | 'ZZ' | 'ext' | 'country' | 'phone'
 // The `Props` interface extends `React.InputHTMLAttributes<HTMLInputElement>`
 // in order to support "rest" props (any other props not used by this library).
 //
-// `Omit<..., 'onChange'>` is added in order to omit the standard `onChange(event: Event)`
-// HTML input `change` event handler because it has a different signature from
-// `onChange(value?: Value)`, and, therefore, wouldn't be replaced by it,
-// resuling in the `Props` interface allowing two types of `onChange` property
-// with only one of those being valid.
+// `Omit<..., 'onChange' | 'value'>` is added in order to omit the standard
+// `onChange(event: Event)` and `value: string` HTML attributes
+// because this component uses its own with different signatures:
+// `onChange(value?: Value)` and `value?: Value`.
+// Because the signatures are different, those two standard HTML attributes
+// wouldn't get replaced with the ones used by this library,
+// resulting in the `Props` interface allowing two types of both
+// `onChange` and `value` while only one of each would be valid to pass.
 //
 // This `Props` interface can only be used in an HTML DOM environment
 // because it extends `React.InputHTMLAttributes<HTMLInputElement>`.
 //
-export interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
 	value?: Value;
 	onChange(value?: Value): void;
 	onFocus?(event: React.FocusEvent<HTMLElement>): void;
