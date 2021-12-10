@@ -54,8 +54,17 @@ export type Labels = Partial<Record<Country | 'ZZ' | 'ext' | 'country' | 'phone'
 // * `/react-hook-form/index.d.ts`
 // * `/core/index.d.ts`.
 //
-// These props are only for an HTML DOM environment
-// because they extend `React.InputHTMLAttributes<HTMLInputElement>`.
+// The `Props` interface extends `React.InputHTMLAttributes<HTMLInputElement>`
+// in order to support "rest" props (any other props not used by this library).
+//
+// `Omit<..., 'onChange'>` is added in order to omit the standard `onChange(event: Event)`
+// HTML input `change` event handler because it has a different signature from
+// `onChange(value?: Value)`, and, therefore, wouldn't be replaced by it,
+// resuling in the `Props` interface allowing two types of `onChange` property
+// with only one of those being valid.
+//
+// This `Props` interface can only be used in an HTML DOM environment
+// because it extends `React.InputHTMLAttributes<HTMLInputElement>`.
 //
 export interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
 	value?: Value;
