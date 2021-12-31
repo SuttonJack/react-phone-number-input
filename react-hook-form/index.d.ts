@@ -32,7 +32,7 @@ interface ReactHookFormComponentPropsOnChangeValue extends ReactHookFormComponen
   onBlur?(event: React.FocusEvent<HTMLElement>): void;
 }
 
-export interface Props extends BaseProps, ReactHookFormComponentPropsOnChangeValue {
+export interface Props extends Omit<BaseProps, 'defaultValue' | 'name' | 'onChange'>, ReactHookFormComponentPropsOnChangeValue {
 }
 
 type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State<Props>>
