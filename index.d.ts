@@ -51,8 +51,8 @@ export type Labels = Partial<Record<Country | 'ZZ' | 'ext' | 'country' | 'phone'
 // }
 
 // `Props` are imported in:
-// * `/react-hook-form/index.d.ts`
 // * `/core/index.d.ts`.
+// * `/react-hook-form/index.d.ts`
 //
 // The `Props` interface extends `React.InputHTMLAttributes<HTMLInputElement>`
 // in order to support "rest" props (any other props not used by this library).
@@ -69,7 +69,7 @@ export type Labels = Partial<Record<Country | 'ZZ' | 'ext' | 'country' | 'phone'
 // This `Props` interface can only be used in an HTML DOM environment
 // because it extends `React.InputHTMLAttributes<HTMLInputElement>`.
 //
-export interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+export type Props<InputComponentProps> = Omit<InputComponentProps, 'value' | 'onChange'> & {
 	value?: Value;
 	onChange(value?: Value): void;
 	onFocus?(event: React.FocusEvent<HTMLElement>): void;
@@ -102,8 +102,9 @@ export interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>,
 	focusInputOnCountrySelection?: boolean;
 }
 
-// `State` is imported in `/core/index.d.ts`
-// and in `/react-hook-form/index.d.ts`.
+// `State` is imported in:
+// * `/core/index.d.ts`
+// * `/react-hook-form/index.d.ts`
 export interface State<Props> {
 	country?: Country;
 	countries?: Country[];
@@ -121,11 +122,19 @@ export interface State<Props> {
 	forceRerender?: object;
 	isFocused?: boolean;
 	// `props` are stored in state in order to be able to compare
-	// new `props` with the "previous" ones in `state.props`.
+	// new `props` with the "previous" ones in `state.props`
+	// in `PhoneInputWithCountry.getDerivedStateFromProps()`.
 	props: Props;
 }
 
-type PhoneInputWithCountrySelectType = React.ComponentClass<Props, State<Props>>
+// export type DefaultInputComponentProps = React.InputHTMLAttributes<HTMLInputElement>
+// Precise TypeScript "typings" turned out to be too complex to figure out,
+// so it just allows any property that a hypothetical custom `inputComponent` could accept.
+export type DefaultInputComponentProps = {
+	[anyProperty: string]: any;
+}
+
+type PhoneInputWithCountrySelectType<InputComponentProps = DefaultInputComponentProps> = React.ComponentClass<Props<InputComponentProps>, State<Props<InputComponentProps>>>
 
 declare const PhoneInputWithCountrySelect: PhoneInputWithCountrySelectType;
 
