@@ -396,6 +396,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 			// Generic HTML attributes.
 			name,
 			disabled,
+			readOnly,
 			autoComplete,
 			style,
 			className,
@@ -455,7 +456,8 @@ class PhoneNumberInput_ extends React.PureComponent {
 				style={style}
 				className={classNames(className, 'PhoneInput', {
 					'PhoneInput--focus': isFocused,
-					'PhoneInput--disabled': disabled
+					'PhoneInput--disabled': disabled,
+					'PhoneInput--readOnly': readOnly
 				})}>
 
 				{/* Country `<select/>` */}
@@ -469,6 +471,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 					onFocus={this.onCountryFocus}
 					onBlur={this.onCountryBlur}
 					disabled={disabled || (countrySelectProps && countrySelectProps.disabled)}
+					readOnly={readOnly || (countrySelectProps && countrySelectProps.readOnly)}
 					iconComponent={this.CountryIcon}/>
 
 				{/* Phone number `<input/>` */}
@@ -486,6 +489,7 @@ class PhoneNumberInput_ extends React.PureComponent {
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}
 					disabled={disabled}
+					readOnly={readOnly}
 					inputComponent={inputComponent}
 					className={classNames(
 						'PhoneInputInput',
@@ -532,10 +536,16 @@ PhoneNumberInput.propTypes = {
 	onBlur: PropTypes.func,
 
 	/**
-	 * Set to `true` to disable both the phone number `<input/>`
-	 * and the country `<select/>`.
+	 * Set to `true` to mark both the phone number `<input/>`
+	 * and the country `<select/>` as `disabled`.
 	 */
 	disabled: PropTypes.bool,
+
+	/**
+	 * Set to `true` to mark both the phone number `<input/>`
+	 * and the country `<select/>` as `readonly`.
+	 */
+	readOnly: PropTypes.bool,
 
 	/**
 	 * Sets `autoComplete` property for phone number `<input/>`.
@@ -747,6 +757,7 @@ PhoneNumberInput.propTypes = {
 	 * * `options: object[]` — The list of all selectable countries (including "International") each being an object of shape `{ value: string?, label: string }`.
 	 * * `iconComponent: PropTypes.elementType` — React component that renders a country icon: `<Icon country={value}/>`. If `country` is `undefined` then it renders an "International" icon.
 	 * * `disabled: boolean?` — HTML `disabled` attribute.
+	 * * `readOnly: boolean?` — HTML `readOnly` attribute.
 	 * * `tabIndex: (number|string)?` — HTML `tabIndex` attribute.
 	 * * `className: string` — CSS class name.
 	 */
