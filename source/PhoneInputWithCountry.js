@@ -454,7 +454,8 @@ class PhoneNumberInput_ extends React.PureComponent {
 			<ContainerComponent
 				style={style}
 				className={classNames(className, 'PhoneInput', {
-					'PhoneInput--focus': isFocused
+					'PhoneInput--focus': isFocused,
+					'PhoneInput--disabled': disabled
 				})}>
 
 				{/* Country `<select/>` */}
