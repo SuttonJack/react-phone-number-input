@@ -8,7 +8,7 @@ import {
 } from '../react-hook-form/index.d';
 
 import {
-  Props as BaseProps,
+  FeatureProps as BaseProps,
   Country,
   Value
 } from '../input/index.d';
