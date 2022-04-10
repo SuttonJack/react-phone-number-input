@@ -53,7 +53,7 @@ PhoneInput.propTypes = {
 
 	/**
 	 * A function of `value: string?`.
-	 * Updates the `value` property.
+	 * Updates the `value` property (`undefined` corresponds to an empty `value`).
 	 */
 	onChange: PropTypes.func.isRequired,
 
