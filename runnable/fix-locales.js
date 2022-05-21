@@ -17,7 +17,7 @@ for (const country of getCountries()) {
 }
 
 // For each locale.
-fs.readdirSync(path.resolve(__dirname, '../locale')).map((name) => {
+fs.readdirSync(path.resolve('./locale')).map((name) => {
 	if (name === 'en.json') {
 		return
 	}
@@ -44,5 +44,5 @@ fs.readdirSync(path.resolve(__dirname, '../locale')).map((name) => {
 		}
 	}
 	// Output locale data.
-	fs.writeFileSync(path.resolve(__dirname, `../locale/${name}`), JSON.stringify(newLocale, null, '\t'), 'utf-8')
+	fs.writeFileSync(path.resolve(`./locale/${name}`), JSON.stringify(newLocale, null, '\t'), 'utf-8')
 })
