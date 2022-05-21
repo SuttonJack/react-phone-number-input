@@ -178,7 +178,7 @@
     "webpack": "^5.72.1"
   },
   "scripts": {
-    "generate-docs": "styleguidist build --config react-styleguidist.js",
+    "generate-docs": "styleguidist build --config react-styleguidist.cjs",
     "test": "node --experimental-json-modules node_modules/mocha/bin/_mocha --bail --require ./test/setup.js \"source/**/*.test.js\" \"test/**/*.test.js\"",
     "test-coverage": "npm-run-all build-commonjs-clean build-commonjs-package.json build-commonjs-modules-with-tests test-coverage:commonjs",
     "test-coverage:commonjs": "node --experimental-json-modules node_modules/istanbul/lib/cli.js cover -x \"*.test.js\" -x \"commonjs/DOM/**/*.js\" -x \"react/DOM/**/*.js\" -x \"commonjs/utility/shallowEqual.js\" -x \"commonjs/utility/debounce.js\" -x \"commonjs/utility/debug.js\" node_modules/mocha/bin/_mocha -- --colors --reporter dot --require regenerator-runtime --require ./test/setup.js \"commonjs/**/*.test.js\" --recursive",
@@ -194,9 +194,9 @@
     "build-es6-clean": "rimraf ./modules/**/*",
     "build": "npm-run-all clean-for-build build-commonjs build-es6-modules browser-build build-styles",
     "build-styles": "node runnable/build-bundle-styles",
-    "fix-locales": "node runnable/fix-locales",
+    "fix-locales": "node --experimental-json-modules runnable/fix-locales",
     "generate-locale-exports": "node runnable/generate-locale-exports",
-    "verify-flag-existence": "node runnable/verify-flag-existence",
+    "verify-flag-existence": "node --experimental-json-modules runnable/verify-flag-existence",
     "prepublishOnly": "npm-run-all generate-locale-exports fix-locales verify-flag-existence build test"
   },
   "repository": {

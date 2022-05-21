@@ -1,4 +1,4 @@
-export default {
+module.exports = {
 	components: "source/PhoneInputWithCountry.js",
 	styleguideDir: "website/docs",
 	usageMode: "expand",
