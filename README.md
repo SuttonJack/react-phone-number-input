@@ -355,7 +355,7 @@ For example, using [`flagpack`](https://github.com/jackiboy/flagpack) "4x3" flag
 ```
 
 ```js
-<PhoneInput flagUrl="https://flag.pk/flags/4x3/{XX}.svg" .../>
+<PhoneInput flagUrl="https://flag.pk/flags/4x3/{xx}.svg" .../>
 ```
 
 ## Including all flags
