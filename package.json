@@ -347,7 +347,9 @@
     "webpack": "^5.74.0"
   },
   "scripts": {
-    "generate-docs": "rimraf ./react-styleguidist/project/**/* && copyfiles .babelrc source/**/* react-styleguidist/project && styleguidist build --config react-styleguidist/styleguide.config.js",
+    "generate-docs:core": "styleguidist build --config react-styleguidist/styleguide.config.js",
+    "generate-docs:prepare": "rimraf ./react-styleguidist/project/**/* && copyfiles .babelrc source/**/* react-styleguidist/project",
+    "generate-docs": "npm-run-all generate-docs:prepare generate-docs:core",
     "test": "node --experimental-json-modules node_modules/mocha/bin/_mocha --bail --require ./test/setup.js \"source/**/*.test.js\" \"test/**/*.test.js\"",
     "test-coverage": "npm-run-all build-commonjs-clean build-commonjs-package.json build-commonjs-modules-with-tests test-coverage:commonjs",
     "test-coverage:commonjs": "node --experimental-json-modules node_modules/istanbul/lib/cli.js cover -x \"*.test.js\" -x \"commonjs/DOM/**/*.js\" -x \"react/DOM/**/*.js\" -x \"commonjs/utility/shallowEqual.js\" -x \"commonjs/utility/debounce.js\" -x \"commonjs/utility/debug.js\" node_modules/mocha/bin/_mocha -- --colors --reporter dot --require regenerator-runtime --require ./test/setup.js \"commonjs/**/*.test.js\" --recursive",
