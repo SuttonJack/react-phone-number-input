@@ -1,6 +1,6 @@
 module.exports = {
-	components: "source/PhoneInputWithCountry.js",
-	styleguideDir: "website/docs",
+	components: "project/source/PhoneInputWithCountry.js",
+	styleguideDir: "../website/docs",
 	usageMode: "expand",
 	sortProps: props => props,
 	dangerouslyUpdateWebpackConfig(webpackConfig, env) {
@@ -15,7 +15,10 @@ module.exports = {
 				{
 					test: /\.jsx?$/,
 					exclude: /node_modules/,
-					loader: 'babel-loader'
+					loader: 'babel-loader',
+					options: {
+						babelrcRoots: ['..']
+					}
 				},
 				// Other loaders that are needed for your components
 				{
