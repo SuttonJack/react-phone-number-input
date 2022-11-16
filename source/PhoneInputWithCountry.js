@@ -464,27 +464,15 @@ class PhoneNumberInput_ extends React.PureComponent {
 
 		return (
 			<ContainerComponent
-				style={style}
+				style={{
+					...style,
+					flexDirection: 'row-reverse'
+				}}
 				className={classNames(className, 'PhoneInput', {
 					'PhoneInput--focus': isFocused,
 					'PhoneInput--disabled': disabled,
 					'PhoneInput--readOnly': readOnly
 				})}>
-
-				{/* Country `<select/>` */}
-				<CountrySelectComponent
-					name={name ? `${name}Country` : undefined}
-					aria-label={labels.country}
-					{...countrySelectProps}
-					value={country}
-					options={countrySelectOptions}
-					onChange={this.onCountryChange}
-					onFocus={this.onCountryFocus}
-					onBlur={this.onCountryBlur}
-					disabled={disabled || (countrySelectProps && countrySelectProps.disabled)}
-					readOnly={readOnly || (countrySelectProps && countrySelectProps.readOnly)}
-					iconComponent={this.CountryIcon}/>
-
 				{/* Phone number `<input/>` */}
 				<InputComponent
 					ref={this.setInputRef}
@@ -507,6 +495,19 @@ class PhoneNumberInput_ extends React.PureComponent {
 						numberInputProps && numberInputProps.className,
 						rest.className
 					)}/>
+				{/* Country `<select/>` */}
+				<CountrySelectComponent
+					name={name ? `${name}Country` : undefined}
+					aria-label={labels.country}
+					{...countrySelectProps}
+					value={country}
+					options={countrySelectOptions}
+					onChange={this.onCountryChange}
+					onFocus={this.onCountryFocus}
+					onBlur={this.onCountryBlur}
+					disabled={disabled || (countrySelectProps && countrySelectProps.disabled)}
+					readOnly={readOnly || (countrySelectProps && countrySelectProps.readOnly)}
+					iconComponent={this.CountryIcon}/>
 			</ContainerComponent>
 		)
 	}

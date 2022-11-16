@@ -1,6 +1,6 @@
 {
-  "name": "react-phone-number-input",
-  "version": "3.2.12",
+  "name": "worlds-phone-number-input",
+  "version": "3.3.0",
   "description": "Telephone number input React component",
   "main": "min/index.cjs",
   "module": "min/index.js",
@@ -371,10 +371,6 @@
     "verify-flag-existence": "node --experimental-json-modules runnable/verify-flag-existence",
     "prepublishOnly": "npm-run-all generate-locale-exports fix-locales verify-flag-existence build test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/catamphetamine/react-phone-number-input.git"
-  },
   "keywords": [
     "react",
     "phone",
@@ -383,10 +379,7 @@
     "telephone",
     "international"
   ],
-  "author": "catamphetamine <purecatamphetamine@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://gitlab.com/catamphetamine/react-phone-number-input/issues"
-  },
-  "homepage": "https://gitlab.com/catamphetamine/react-phone-number-input#readme"
+  "repository": "https://github.com/SuttonJack/react-phone-number-input.git",
+  "author": "SuttonJack <jack@momenthouse.com>"
 }
